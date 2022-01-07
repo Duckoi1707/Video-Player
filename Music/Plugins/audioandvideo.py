@@ -151,7 +151,7 @@ async def getspy(_,CallbackQuery):
                     a6 = InlineKeyboardButton(text=f"(2160)p 📹 {humanbytes(x['filesize'])}", callback_data=f"ytdata video||{x['format_id']}||{videoid}")   
         else:
             return await CallbackQuery.message.reply_text("Video Format Not Found.")
-    universal = InlineKeyboardButton(text="ᴛᴜᴛᴜᴘ •", callback_data=f'close2')
+    universal = InlineKeyboardButton(text="🗑 Close Menu", callback_data=f'close2')
     if j == 0:
         return await CallbackQuery.message.reply_text("Video Format Not Found..")
     elif j == 1:
@@ -161,8 +161,8 @@ async def getspy(_,CallbackQuery):
                     a1,
                 ],
                 [
-                    InlineKeyboardButton(text="⌫", callback_data=f'good {videoid}|{user_id}'),
-                    InlineKeyboardButton(text="Close", callback_data=f'close2')
+                    InlineKeyboardButton(text="『⇐』 Go Back", callback_data=f'good {videoid}|{user_id}'),
+                    InlineKeyboardButton(text="🗑 Close Menu", callback_data=f'close2')
                 ]    
             ]
         )
@@ -174,8 +174,8 @@ async def getspy(_,CallbackQuery):
                     a2,
                 ],
                 [
-                    InlineKeyboardButton(text="⌫", callback_data=f'good {videoid}|{user_id}'),
-                    InlineKeyboardButton(text="Close", callback_data=f'close2')
+                    InlineKeyboardButton(text="『⇐』 Go Back", callback_data=f'good {videoid}|{user_id}'),
+                    InlineKeyboardButton(text="🗑 Close Menu", callback_data=f'close2')
                 ]    
             ]
         )  
@@ -190,8 +190,8 @@ async def getspy(_,CallbackQuery):
                     a3,
                 ],
                 [
-                    InlineKeyboardButton(text="⌫", callback_data=f'good {videoid}|{user_id}'),
-                    InlineKeyboardButton(text="Close", callback_data=f'close2')
+                    InlineKeyboardButton(text="『⇐』 Go Back", callback_data=f'good {videoid}|{user_id}'),
+                    InlineKeyboardButton(text="🗑 Close Menu", callback_data=f'close2')
                 ]    
             ]
         ) 
@@ -207,8 +207,8 @@ async def getspy(_,CallbackQuery):
                     a4,
                 ],
                 [
-                    InlineKeyboardButton(text="⌫", callback_data=f'good {videoid}|{user_id}'),
-                    InlineKeyboardButton(text="Close", callback_data=f'close2')
+                    InlineKeyboardButton(text="『⇐』 Go Back", callback_data=f'good {videoid}|{user_id}'),
+                    InlineKeyboardButton(text="🗑 Close Menu", callback_data=f'close2')
                 ]    
             ]
         )    
@@ -227,8 +227,8 @@ async def getspy(_,CallbackQuery):
                     a5,
                 ],
                 [
-                    InlineKeyboardButton(text="⌫", callback_data=f'good {videoid}|{user_id}'),
-                    InlineKeyboardButton(text="Close", callback_data=f'close2')
+                    InlineKeyboardButton(text="『⇐』 Go Back", callback_data=f'good {videoid}|{user_id}'),
+                    InlineKeyboardButton(text="🗑 Close Menu", callback_data=f'close2')
                 ]    
             ]
         )  
@@ -248,8 +248,8 @@ async def getspy(_,CallbackQuery):
                     a6,
                 ],
                 [
-                    InlineKeyboardButton(text="⌫", callback_data=f'good {videoid}|{user_id}'),
-                    InlineKeyboardButton(text="Close", callback_data=f'close2')
+                    InlineKeyboardButton(text="『⇐』 Go Back", callback_data=f'good {videoid}|{user_id}'),
+                    InlineKeyboardButton(text="🗑 Close Menu", callback_data=f'close2')
                 ]    
             ]
         )    
@@ -279,8 +279,8 @@ async def ytdata(_,CallbackQuery):
                     a2,
                 ],
                 [
-                    InlineKeyboardButton(text="⌫", callback_data=f'good {videoid}|{user_id}'),
-                    InlineKeyboardButton(text="Close", callback_data=f'close2')
+                    InlineKeyboardButton(text="『⇐』 Go Back", callback_data=f'good {videoid}|{user_id}'),
+                    InlineKeyboardButton(text="🗑 Close Menu", callback_data=f'close2')
                 ]    
             ]
         )
@@ -309,8 +309,8 @@ def inl_mark(videoid, user_id):
                 InlineKeyboardButton(text="Download or Upload Failed......", callback_data=f'down')
             ],
             [
-                InlineKeyboardButton(text="⌫", callback_data=f'good {videoid}|{user_id}'),
-                InlineKeyboardButton(text="ᴛᴜᴛᴜᴘ", callback_data=f'close2')
+                InlineKeyboardButton(text="『⇐』 Go Back", callback_data=f'good {videoid}|{user_id}'),
+                InlineKeyboardButton(text="🗑 Close Menu", callback_data=f'close2')
             ],
         ]
     return buttons 
@@ -342,10 +342,12 @@ async def boom(_,CallbackQuery):
     mystic = await CallbackQuery.edit_message_text("Download Started\n\nDownloading speed could be slow. Please hold on..", reply_markup = inl)
     fetched = f"""
 **Track Downloaded**
+
 ❇️**Title:** {x["title"]}
 ⏳**Duration:** {round(x["duration"] / 60)} Mins
 👀**Views:** __{x["view_count"]}__
 🎥**Channel Name:** {x["uploader"]}
+
 __Youtube Inline Download Powered By Music__ """    
     link = (x["webpage_url"])
     channel = (x["channel_url"])

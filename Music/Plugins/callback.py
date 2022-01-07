@@ -26,32 +26,139 @@ from time import time
 from Music import converter
 import aiohttp
 from aiohttp import ClientResponseError, ServerTimeoutError, TooManyRedirects
-from Music import dbb, app, BOT_USERNAME, BOT_ID, ASSID, ASSNAME, ASSUSERNAME, ASSMENTION
-from Music.MusicUtilities.tgcallsrun import (music, convert, download, clear, get, is_empty, put, task_done, smexy)
+from Music import (
+    dbb,
+    app,
+    BOT_USERNAME,
+    BOT_ID,
+    ASSID,
+    ASSNAME,
+    ASSUSERNAME,
+    ASSMENTION,
+)
+from Music.MusicUtilities.tgcallsrun import (
+    music,
+    convert,
+    download,
+    clear,
+    get,
+    is_empty,
+    put,
+    task_done,
+    smexy,
+)
 from Music.MusicUtilities.helpers.decorators import errors
-from Music.MusicUtilities.helpers.filters import command, other_filters
+from Music.MusicUtilities.helpers.filters import (
+    command,
+    other_filters,
+)
 from Music.MusicUtilities.helpers.paste import paste
-from Music.MusicUtilities.tgcallsrun import (music, clear, get, is_empty, put, task_done)
-from Music.MusicUtilities.database.queue import (is_active_chat, add_active_chat, remove_active_chat, music_on, is_music_playing, music_off)
-from Music.MusicUtilities.database.playlist import (get_playlist_count, _get_playlists, get_note_names, get_playlist, save_playlist, delete_playlist)
-from Music.MusicUtilities.database.assistant import (_get_assistant, get_assistant, save_assistant)
-from Music.MusicUtilities.helpers.inline import (play_keyboard, search_markup, play_markup, playlist_markup, audio_markup)
-from Music.MusicUtilities.helpers.inline import play_keyboard, confirm_keyboard, play_list_keyboard, close_keyboard, confirm_group_keyboard
-from Music.MusicUtilities.tgcallsrun import (music, convert, download, clear, get, is_empty, put, task_done, smexy)
-from Music.MusicUtilities.database.queue import (is_active_chat, add_active_chat, remove_active_chat, music_on, is_music_playing, music_off)
-from Music.MusicUtilities.database.onoff import (is_on_off, add_on, add_off)
-from Music.MusicUtilities.database.blacklistchat import (blacklisted_chats, blacklist_chat, whitelist_chat)
-from Music.MusicUtilities.database.gbanned import (get_gbans_count, is_gbanned_user, add_gban_user, add_gban_user)
-from Music.MusicUtilities.database.theme import (_get_theme, get_theme, save_theme)
-from Music.MusicUtilities.database.assistant import (_get_assistant, get_assistant, save_assistant)
+from Music.MusicUtilities.tgcallsrun import (
+    music,
+    clear,
+    get,
+    is_empty,
+    put,
+    task_done,
+)
+from Music.MusicUtilities.database.queue import (
+    is_active_chat,
+    add_active_chat,
+    remove_active_chat,
+    music_on,
+    is_music_playing,
+    music_off,
+)
+from Music.MusicUtilities.database.playlist import (
+    get_playlist_count,
+    _get_playlists,
+    get_note_names,
+    get_playlist,
+    save_playlist,
+    delete_playlist,
+)
+from Music.MusicUtilities.database.assistant import (
+    _get_assistant,
+    get_assistant,
+    save_assistant,
+)
+from Music.MusicUtilities.helpers.inline import (
+    play_keyboard,
+    search_markup,
+    play_markup,
+    playlist_markup,
+    audio_markup,
+)
+from Music.MusicUtilities.helpers.inline import (
+    play_keyboard,
+    confirm_keyboard,
+    play_list_keyboard,
+    close_keyboard,
+    confirm_group_keyboard,
+)
+from Music.MusicUtilities.tgcallsrun import (
+    music,
+    convert,
+    download,
+    clear,
+    get,
+    is_empty,
+    put,
+    task_done,
+    smexy,
+)
+from Music.MusicUtilities.database.queue import (
+    is_active_chat,
+    add_active_chat,
+    remove_active_chat,
+    music_on,
+    is_music_playing,
+    music_off,
+)
+from Music.MusicUtilities.database.onoff import (
+    is_on_off,
+    add_on,
+    add_off,
+)
+from Music.MusicUtilities.database.blacklistchat import (
+    blacklisted_chats,
+    blacklist_chat,
+    whitelist_chat,
+)
+from Music.MusicUtilities.database.gbanned import (
+    get_gbans_count,
+    is_gbanned_user,
+    add_gban_user,
+    add_gban_user,
+)
+from Music.MusicUtilities.database.theme import (
+    _get_theme,
+    get_theme,
+    save_theme,
+)
+from Music.MusicUtilities.database.assistant import (
+    _get_assistant,
+    get_assistant,
+    save_assistant,
+)
 from Music.config import DURATION_LIMIT, ASS_ID
 from Music.MusicUtilities.helpers.decorators import errors
 from Music.MusicUtilities.helpers.filters import command
-from Music.MusicUtilities.helpers.gets import (get_url, themes, random_assistant, ass_det)
+from Music.MusicUtilities.helpers.gets import (
+    get_url,
+    themes,
+    random_assistant,
+    ass_det,
+)
 from Music.MusicUtilities.helpers.thumbnails import gen_thumb
 from Music.MusicUtilities.helpers.chattitle import CHAT_TITLE
 from Music.MusicUtilities.helpers.ytdl import ytdl_opts 
-from Music.MusicUtilities.helpers.inline import (play_keyboard, search_markup, play_markup, playlist_markup)
+from Music.MusicUtilities.helpers.inline import (
+    play_keyboard,
+    search_markup,
+    play_markup,
+    playlist_markup,
+)
 import requests
 from pyrogram.types import (
     CallbackQuery,
@@ -66,10 +173,11 @@ from pykeyboard import InlineKeyboard
 from pyrogram import filters
 from Music import aiohttpsession as session
 
-pattern = re.compile(r"^text/|json$|yaml$|xml$|toml$|x-sh$|x-shellscript$")
+pattern = re.compile(
+    r"^text/|json$|yaml$|xml$|toml$|x-sh$|x-shellscript$"
+)
 
 flex = {}
-
 
 async def isPreviewUp(preview: str) -> bool:
     for _ in range(7):
@@ -86,42 +194,31 @@ async def isPreviewUp(preview: str) -> bool:
     return False
 
 
+    
 @Client.on_callback_query(filters.regex(pattern=r"ppcl"))
-async def closesmex(_, CallbackQuery):
+async def closesmex(_,CallbackQuery):
     callback_data = CallbackQuery.data.strip()
-    CallbackQuery.message.chat.id
+    chat_id = CallbackQuery.message.chat.id
     callback_request = callback_data.split(None, 1)[1]
-    CallbackQuery.from_user.id
+    userid = CallbackQuery.from_user.id 
     try:
-        smex, user_id = callback_request.split("|")
+        smex, user_id = callback_request.split("|") 
     except Exception as e:
-        await CallbackQuery.message.edit(
-            f"""
-Terjadi kesalahan
-Kemungkinan alasannya bisa** :{e}
-"""
-        )
-        return
+        await CallbackQuery.message.edit(f"❌ Error Occured\n**Possible reason could be**:{e}")
+        return 
     if CallbackQuery.from_user.id != int(user_id):
-        await CallbackQuery.answer(
-            "You are not allowed to close this memu", show_alert=True
-        )
+        await CallbackQuery.answer("❌ You're not allowed to close this", show_alert=True)
         return
     await CallbackQuery.message.delete()
     await CallbackQuery.answer()
-
-
+    
+    
 @Client.on_callback_query(filters.regex("pausevc"))
-async def pausevc(_, CallbackQuery):
-    a = await app.get_chat_member(
-        CallbackQuery.message.chat.id, CallbackQuery.from_user.id
-    )
+async def pausevc(_,CallbackQuery):
+    a = await app.get_chat_member(CallbackQuery.message.chat.id , CallbackQuery.from_user.id)
     if not a.can_manage_voice_chats:
-        return await CallbackQuery.answer(
-            "You do not have the necessary permissions to perform this action.\n• MANAGING VOICE CHATS",
-            show_alert=True,
-        )
-    CallbackQuery.from_user.first_name
+        return await CallbackQuery.answer("❌ You don't have the required permission to perform this action.\nPermission: MANAGE VOICE CHATS", show_alert=True)
+    checking = CallbackQuery.from_user.first_name
     chat_id = CallbackQuery.message.chat.id
     if await is_active_chat(chat_id):
         if await is_music_playing(chat_id):
@@ -130,131 +227,86 @@ async def pausevc(_, CallbackQuery):
             await CallbackQuery.answer("Voicechat Paused", show_alert=True)
             user_id = CallbackQuery.from_user.id
             user_name = CallbackQuery.from_user.first_name
-            rpk = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
-            await CallbackQuery.message.reply(
-                f"🎧 Song Paused by {rpk}!", reply_markup=play_keyboard
-            )
+            rpk = "["+user_name+"](tg://user?id="+str(user_id)+")"
+            await CallbackQuery.message.reply(f"🎧 Voicechat Paused by {rpk}!")
             await CallbackQuery.message.delete()
         else:
-            await CallbackQuery.answer(f"Nothing is playing!", show_alert=True)
+            await CallbackQuery.answer(f"❌ Nothing's playing on Music!", show_alert=True)
             return
     else:
-        await CallbackQuery.answer(f"Nothing is playing in Music!", show_alert=True)
-
-
+        await CallbackQuery.answer(f"❌ Nothing's playing on Music!", show_alert=True)
+   
+    
 @Client.on_callback_query(filters.regex("resumevc"))
-async def resumevc(_, CallbackQuery):
-    a = await app.get_chat_member(
-        CallbackQuery.message.chat.id, CallbackQuery.from_user.id
-    )
+async def resumevc(_,CallbackQuery):  
+    a = await app.get_chat_member(CallbackQuery.message.chat.id , CallbackQuery.from_user.id)
     if not a.can_manage_voice_chats:
-        return await CallbackQuery.answer(
-            """
-You do not have the necessary permissions to perform this action. 
-• MANAGE VOICE CHAT
-""",
-            show_alert=True,
-        )
-    CallbackQuery.from_user.first_name
+        return await CallbackQuery.answer("❌ You don't have the required permission to perform this action.\nPermission: MANAGE VOICE CHATS", show_alert=True)
+    checking = CallbackQuery.from_user.first_name
     chat_id = CallbackQuery.message.chat.id
     if await is_active_chat(chat_id):
         if await is_music_playing(chat_id):
-            await CallbackQuery.answer(
-                "I don't think there's anything paused in the voice chat",
-                show_alert=True,
-            )
-            return
+            await CallbackQuery.answer("❌ I dont think if something's paused on voice chat", show_alert=True)
+            return    
         else:
             await music_on(chat_id)
             await music.pytgcalls.resume_stream(chat_id)
-            await CallbackQuery.answer("Next", show_alert=True)
+            await CallbackQuery.answer("Voicechat Resumed", show_alert=True)
             user_id = CallbackQuery.from_user.id
             user_name = CallbackQuery.from_user.first_name
-            rpk = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
-            await CallbackQuery.message.reply(
-                f"🎧 Song Continued by {rpk}!", reply_markup=play_keyboard
-            )
+            rpk = "["+user_name+"](tg://user?id="+str(user_id)+")"
+            await CallbackQuery.message.reply(f"🎧 Voicechat Resumed by {rpk}!")
             await CallbackQuery.message.delete()
     else:
-        await CallbackQuery.answer(f"Tidak ada yang diputar!", show_alert=True)
-
-
+        await CallbackQuery.answer(f"❌ Nothing's playing on Music!", show_alert=True)
+   
+    
 @Client.on_callback_query(filters.regex("skipvc"))
-async def skipvc(_, CallbackQuery):
-    a = await app.get_chat_member(
-        CallbackQuery.message.chat.id, CallbackQuery.from_user.id
-    )
+async def skipvc(_,CallbackQuery): 
+    a = await app.get_chat_member(CallbackQuery.message.chat.id , CallbackQuery.from_user.id)
     if not a.can_manage_voice_chats:
-        return await CallbackQuery.answer(
-            """
-You do not have the necessary permissions to perform this action. 
-
-• MANAGE VOICE CHAT
-""",
-            show_alert=True,
-        )
-    CallbackQuery.from_user.first_name
+        return await CallbackQuery.answer("❌ You don't have the required permission to perform this action.\nPermission: MANAGE VOICE CHATS", show_alert=True)
+    checking = CallbackQuery.from_user.first_name
     chat_id = CallbackQuery.message.chat.id
     chat_title = CallbackQuery.message.chat.title
     if await is_active_chat(chat_id):
         task_done(chat_id)
         if is_empty(chat_id):
             user_id = CallbackQuery.from_user.id
-            await remove_active_chat(chat_id)
+            await remove_active_chat(chat_id) 
             user_name = CallbackQuery.from_user.first_name
-            rpk = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
+            rpk = "["+user_name+"](tg://user?id="+str(user_id)+")"
             await remove_active_chat(chat_id)
             await CallbackQuery.answer()
-            await CallbackQuery.message.reply(
-                f"""
-**Skip Button Used By** {rpk} 
-
-No more songs in Queue 
-
-Leaving Voice Chat
-"""
-            )
+            await CallbackQuery.message.reply(f"**__Skip Button Used By__** {rpk}\n\nNo more music in __Queues__ \n\nLeaving Voice Chat")
             await music.pytgcalls.leave_group_call(chat_id)
             return
         else:
-            await CallbackQuery.answer("Obrolan Suara Dilewati", show_alert=True)
-            afk = get(chat_id)["file"]
-            f1 = afk[0]
-            f2 = afk[1]
-            f3 = afk[2]
-            finxx = f"{f1}{f2}{f3}"
-            if str(finxx) != "raw":
-                mystic = await CallbackQuery.message.reply(
-                    """
-Music is playing Playlist.... 
-
-Download Next Music From Playlist....
-"""
-                )
-                url = f"https://www.youtube.com/watch?v={afk}"
+            await CallbackQuery.answer("Voicechat Skipped", show_alert=True)
+            afk = get(chat_id)['file']
+            f1 = (afk[0])
+            f2 = (afk[1])
+            f3 = (afk[2])
+            finxx = (f"{f1}{f2}{f3}")
+            if str(finxx) != "raw":   
+                mystic = await CallbackQuery.message.reply("Music is currently playing Playlist...\n\nDownloading Next Music From Playlist....")
+                url = (f"https://www.youtube.com/watch?v={afk}")
                 try:
                     with yt_dlp.YoutubeDL(ytdl_opts) as ytdl:
                         x = ytdl.extract_info(url, download=False)
                 except Exception as e:
-                    return await mystic.edit(
-                        f"""
-Failed to download this video. 
-
-**Reason**:{e}
-"""
-                    )
-                title = x["title"]
+                    return await mystic.edit(f"❌ Failed to download this video.\n\n**Reason**:{e}") 
+                title = (x["title"])
                 videoid = afk
-
                 def my_hook(d):
-                    if d["status"] == "downloading":
-                        percentage = d["_percent_str"]
-                        per = (str(percentage)).replace(".", "", 1).replace("%", "", 1)
+                    if d['status'] == 'downloading':
+                        percentage = d['_percent_str']
+                        per = (str(percentage)).replace(".","", 1).replace("%","", 1)
                         per = int(per)
-                        eta = d["eta"]
-                        speed = d["_speed_str"]
-                        size = d["_total_bytes_str"]
-                        bytesx = d["total_bytes"]
+                        eta = d['eta']
+                        speed = d['_speed_str']
+                        size = d['_total_bytes_str']
+                        bytesx = d['total_bytes']
                         if str(bytesx) in flex:
                             pass
                         else:
@@ -262,59 +314,44 @@ Failed to download this video.
                         if flex[str(bytesx)] == 1:
                             flex[str(bytesx)] += 1
                             sedtime.sleep(1)
-                            mystic.edit(
-                                f"Downloading {title[:50]}\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec"
-                            )
-                        if per > 500:
+                            mystic.edit(f"Downloading {title[:50]}\n\n**File Size:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
+                        if per > 500:    
                             if flex[str(bytesx)] == 2:
                                 flex[str(bytesx)] += 1
                                 sedtime.sleep(0.5)
-                                mystic.edit(
-                                    f"Downloading {title[:50]}...\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec"
-                                )
-                                print(
-                                    f"[{videoid}] Downloaded {percentage} at a speed of {speed} in {chat_title} | ETA: {eta} seconds"
-                                )
-                        if per > 800:
+                                mystic.edit(f"Downloading {title[:50]}...\n\n**File Size:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
+                                print(f"[{videoid}] Downloaded {percentage} at a speed of {speed} in {chat_title} | ETA: {eta} seconds")
+                        if per > 800:    
                             if flex[str(bytesx)] == 3:
                                 flex[str(bytesx)] += 1
                                 sedtime.sleep(0.5)
-                                mystic.edit(
-                                    f"Downloading {title[:50]}....\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec"
-                                )
-                                print(
-                                    f"[{videoid}] Downloaded {percentage} at a speed of {speed} in {chat_title} | ETA: {eta} seconds"
-                                )
-                        if per == 1000:
+                                mystic.edit(f"Downloading {title[:50]}....\n\n**File Size:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
+                                print(f"[{videoid}] Downloaded {percentage} at a speed of {speed} in {chat_title} | ETA: {eta} seconds")
+                        if per == 1000:    
                             if flex[str(bytesx)] == 4:
                                 flex[str(bytesx)] = 1
                                 sedtime.sleep(0.5)
-                                mystic.edit(
-                                    f"Downloading {title[:50]}.....\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec"
-                                )
-                                print(
-                                    f"[{videoid}] Downloaded {percentage} at a speed of {speed} in {chat_title} | ETA: {eta} seconds"
-                                )
-
+                                mystic.edit(f"Downloading {title[:50]}.....\n\n**File Size:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec") 
+                                print(f"[{videoid}] Downloaded {percentage} at a speed of {speed} in {chat_title} | ETA: {eta} seconds")
                 loop = asyncio.get_event_loop()
                 xx = await loop.run_in_executor(None, download, url, my_hook)
                 file = await convert(xx)
                 await music.pytgcalls.change_stream(
-                    chat_id,
+                    chat_id, 
                     InputStream(
                         InputAudioStream(
                             file,
                         ),
                     ),
                 )
-                thumbnail = x["thumbnail"]
-                duration = x["duration"]
+                thumbnail = (x["thumbnail"])
+                duration = (x["duration"])
                 duration = round(x["duration"] / 60)
                 theme = random.choice(themes)
                 ctitle = (await app.get_chat(chat_id)).title
                 ctitle = await CHAT_TITLE(ctitle)
-                f2 = open(f"search/{afk}id.txt", "r")
-                userid = f2.read()
+                f2 = open(f'search/{afk}id.txt', 'r')        
+                userid =(f2.read())
                 thumb = await gen_thumb(thumbnail, title, userid, theme, ctitle)
                 user_id = userid
                 buttons = play_markup(videoid, user_id)
@@ -322,44 +359,31 @@ Failed to download this video.
                 semx = await app.get_users(userid)
                 user_id = CallbackQuery.from_user.id
                 user_name = CallbackQuery.from_user.first_name
-                rpk = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
+                rpk = "["+user_name+"](tg://user?id="+str(user_id)+")"
                 await CallbackQuery.message.reply_photo(
-                    photo=thumb,
-                    reply_markup=InlineKeyboardMarkup(buttons),
-                    caption=(
-                        f"""
-<b>⏭️ Skipped to next Track {rpk}</b>
-
-<b>🏷 Name: </b>[{title[:25]}]({url})
-<b>⏱️ Duration: :</b> {duration}
-<b>🎧 Requested By:</b> {semx.mention}
-"""
-                    ),
-                )
+                photo= thumb,
+                reply_markup=InlineKeyboardMarkup(buttons),    
+                caption=(f"<b>__Skipped Voice Chat By {rpk}__</b>\n\n🎥 <b>__Started Playing:__ </b>[{title[:25]}]({url}) \n⏳ <b>__Duration:__</b> {duration} Mins\n👤**__Requested by:__** {semx.mention}")
+            )   
                 os.remove(thumb)
-            else:
+            else:      
                 await music.pytgcalls.change_stream(
-                    chat_id,
+                    chat_id, 
                     InputStream(
                         InputAudioStream(
                             afk,
                         ),
                     ),
                 )
-                _chat_ = (
-                    (str(afk))
-                    .replace("_", "", 1)
-                    .replace("/", "", 1)
-                    .replace(".", "", 1)
-                )
-                f2 = open(f"search/{_chat_}title.txt", "r")
-                title = f2.read()
-                f3 = open(f"search/{_chat_}duration.txt", "r")
-                duration = f3.read()
-                f4 = open(f"search/{_chat_}username.txt", "r")
-                username = f4.read()
-                f4 = open(f"search/{_chat_}videoid.txt", "r")
-                videoid = f4.read()
+                _chat_ = ((str(afk)).replace("_","", 1).replace("/","", 1).replace(".","", 1))
+                f2 = open(f'search/{_chat_}title.txt', 'r')        
+                title =(f2.read())
+                f3 = open(f'search/{_chat_}duration.txt', 'r')        
+                duration =(f3.read())
+                f4 = open(f'search/{_chat_}username.txt', 'r')        
+                username =(f4.read())
+                f4 = open(f'search/{_chat_}videoid.txt', 'r')        
+                videoid =(f4.read())
                 user_id = 1
                 videoid = str(videoid)
                 if videoid == "smex1":
@@ -368,32 +392,22 @@ Failed to download this video.
                     buttons = play_markup(videoid, user_id)
                 user_id = CallbackQuery.from_user.id
                 user_name = CallbackQuery.from_user.first_name
-                rpk = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
+                rpk = "["+user_name+"](tg://user?id="+str(user_id)+")"    
                 await CallbackQuery.message.reply_photo(
-                    photo=f"downloads/{_chat_}final.png",
-                    reply_markup=InlineKeyboardMarkup(buttons),
-                    caption=f"""
-<b>⏭️ Skipped to Next Song: {rpk}</b>
-
-<b>🏷️ Name:</b> {title}
-<b>⌚ Duration</b> {duration}
-<b>🎧 Requested By:</b> {username}
-""",
+                photo=f"downloads/{_chat_}final.png",
+                reply_markup=InlineKeyboardMarkup(buttons),
+                caption=f"<b>__Skipped Voice Chat By {rpk}__</b>\n\n🎥 <b>__Started Playing:__</b> {title} \n⏳ <b>__Duration:__</b> {duration} \n👤 <b>__Requested by:__ </b> {username}",
                 )
                 return
-
-
+            
+            
+       
 @Client.on_callback_query(filters.regex("stopvc"))
-async def stopvc(_, CallbackQuery):
-    a = await app.get_chat_member(
-        CallbackQuery.message.chat.id, CallbackQuery.from_user.id
-    )
+async def stopvc(_,CallbackQuery):
+    a = await app.get_chat_member(CallbackQuery.message.chat.id , CallbackQuery.from_user.id)
     if not a.can_manage_voice_chats:
-        return await CallbackQuery.answer(
-            "You don't have the required permission to perform this action.\nPermission: MANAGE VOICE CHATS",
-            show_alert=True,
-        )
-    CallbackQuery.from_user.first_name
+        return await CallbackQuery.answer("❌ You don't have the required permission to perform this action.\nPermission: MANAGE VOICE CHATS", show_alert=True)
+    checking = CallbackQuery.from_user.first_name
     chat_id = CallbackQuery.message.chat.id
     if await is_active_chat(chat_id):
         try:
@@ -402,16 +416,16 @@ async def stopvc(_, CallbackQuery):
             pass
         try:
             await music.pytgcalls.leave_group_call(chat_id)
-        except Exception:
+        except Exception as e:
             pass
-        await remove_active_chat(chat_id)
-        await CallbackQuery.answer("Nothing Is Playing", show_alert=True)
+        await remove_active_chat(chat_id) 
+        await CallbackQuery.answer("Voicechat Stopped", show_alert=True)
         user_id = CallbackQuery.from_user.id
         user_name = CallbackQuery.from_user.first_name
-        rpk = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
-        await CallbackQuery.message.reply(f"🎧 Song Stopped by {rpk}!")
+        rpk = "["+user_name+"](tg://user?id="+str(user_id)+")"
+        await CallbackQuery.message.reply(f"🎧 Voicechat End/Stopped by {rpk}!")
     else:
-        await CallbackQuery.answer(f"Nothing is playing!", show_alert=True)
+        await CallbackQuery.answer(f"❌ Nothing's playing on Music!", show_alert=True)
 
         
 @Client.on_callback_query(filters.regex("play_playlist"))
@@ -424,15 +438,15 @@ async def play_playlist(_,CallbackQuery):
         user_id,smex = callback_request.split("|") 
     except Exception as e:
         await CallbackQuery.answer()
-        return await CallbackQuery.message.edit(f"Error Occured\n**Possible reason could be**:{e}")
+        return await CallbackQuery.message.edit(f"❌ Error Occured\n**Possible reason could be**:{e}")
     Name = CallbackQuery.from_user.first_name
     chat_title = CallbackQuery.message.chat.title
     if str(smex) == "personal":
         if CallbackQuery.from_user.id != int(user_id):
-            return await CallbackQuery.answer("This Is Not Forr You! Play Your Own Playlist Stupid!", show_alert=True)
+            return await CallbackQuery.answer("❌ This is not for you! Play your own playlist", show_alert=True)
         _playlist = await get_note_names(userid)
         if not _playlist:
-            return await CallbackQuery.answer(f"You Have No Playlist On Servers.", show_alert=True)
+            return await CallbackQuery.answer(f"❌ You have no playlist on servers.", show_alert=True)
         else:
             await CallbackQuery.message.delete()
             logger_text=f"""Starting Playlist
@@ -465,7 +479,7 @@ Personal Playlist Playing."""
                         with yt_dlp.YoutubeDL(ytdl_opts) as ytdl:
                             x = ytdl.extract_info(url, download=False)
                     except Exception as e:
-                        return await mystic.edit(f"Failed to download this video.\n\n**Reason**:{e}") 
+                        return await mystic.edit(f"❌ Failed to download this video.\n\n**Reason**:{e}") 
                     title = (x["title"])
                     thumbnail = (x["thumbnail"])
                     def my_hook(d): 
@@ -485,26 +499,26 @@ Personal Playlist Playing."""
                                 flex[str(bytesx)] += 1
                                 try:
                                     if eta > 2:
-                                        mystic.edit(f"Downloading {title[:50]}\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
+                                        mystic.edit(f"Downloading {title[:50]}\n\n**File Size:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
                                 except Exception as e:
                                     pass
                             if per > 250:    
                                 if flex[str(bytesx)] == 2:
                                     flex[str(bytesx)] += 1
                                     if eta > 2:     
-                                        mystic.edit(f"Downloading {title[:50]}..\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
+                                        mystic.edit(f"Downloading {title[:50]}..\n\n**File Size:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
                                     print(f"[{videoid}] Downloaded {percentage} at a speed of {speed} | ETA: {eta} seconds")
                             if per > 500:    
                                 if flex[str(bytesx)] == 3:
                                     flex[str(bytesx)] += 1
                                     if eta > 2:     
-                                        mystic.edit(f"Downloading {title[:50]}...\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
+                                        mystic.edit(f"Downloading {title[:50]}...\n\n**File Size:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
                                     print(f"[{videoid}] Downloaded {percentage} at a speed of {speed} | ETA: {eta} seconds")
                             if per > 800:    
                                 if flex[str(bytesx)] == 4:
                                     flex[str(bytesx)] += 1
                                     if eta > 2:    
-                                        mystic.edit(f"Downloading {title[:50]}....\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
+                                        mystic.edit(f"Downloading {title[:50]}....\n\n**File Size:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
                                     print(f"[{videoid}] Downloaded {percentage} at a speed of {speed} | ETA: {eta} seconds")
                         if d['status'] == 'finished': 
                             try:
@@ -512,7 +526,7 @@ Personal Playlist Playing."""
                             except Exception as e:
                                 taken = "00:00"
                             size = d['_total_bytes_str']
-                            mystic.edit(f"**Downloaded {title[:50]}.....**\n\n**FileSize:** {size}\n**Time Taken:** {taken} sec\n\n**Converting File**[__FFmpeg processing__]")
+                            mystic.edit(f"**Downloaded {title[:50]}.....**\n\n**File Size:** {size}\n**Time Taken:** {taken} sec\n\n**Converting File** [__FFmpeg processing__]")
                             print(f"[{videoid}] Downloaded| Elapsed: {taken} seconds")  
                     loop = asyncio.get_event_loop()
                     xx = await loop.run_in_executor(None, download, url, my_hook)
@@ -536,7 +550,7 @@ Personal Playlist Playing."""
                     m = await CallbackQuery.message.reply_photo(
                     photo=thumb,
                     reply_markup=InlineKeyboardMarkup(buttons),    
-                    caption=(f"🎥<b>__Playing:__ </b>[{title[:25]}]({url}) \n⏳<b>__Duration:__</b> {duration} \n💡<b>__Info:__</b> [Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{videoid})\n👤**__Requested by:__** {checking}")
+                    caption=(f"🎥 <b>__Playing:__ </b>[{title[:25]}]({url}) \n⏳ <b>__Duration:__</b> {duration} \n💡 <b>__Info:__</b> [More Information](https://t.me/{BOT_USERNAME}?start=info_{videoid})\n👤**__Requested by:__** {checking}")
                 )   
                     os.remove(thumb)
                     await CallbackQuery.message.delete()
@@ -558,14 +572,14 @@ Personal Playlist Playing."""
                     a1,
                 ],
                 [
-                    InlineKeyboardButton(text="🗑 Close ", callback_data=f'close2')
+                    InlineKeyboardButton(text="🗑 Close Menu", callback_data=f'close2')
                 ]    
             ]
         )
         if await isPreviewUp(preview):
             try:
                 await CallbackQuery.message.reply_photo(
-                    photo=preview, caption=f"This is Queued Playlist Of {Name}.\n\nIf you want to delete any music from playlist use : /delmyplaylist", quote=False, reply_markup=key
+                    photo=preview, caption=f"This is Queued Playlist of {Name}.\n\nIf you want to delete any music from playlist use : /delmyplaylist", quote=False, reply_markup=key
                 )
                 await m.delete()
             except Exception:
@@ -578,7 +592,7 @@ Personal Playlist Playing."""
     if str(smex) == "group":
         _playlist = await get_note_names(CallbackQuery.message.chat.id)
         if not _playlist:
-            return await CallbackQuery.answer(f"Your Group Has No Playlist On Servers. Try Adding Musics In Playlist.", show_alert=True)
+            return await CallbackQuery.answer(f"❌ Your Group has no playlist on servers, Try adding musics in playlist.", show_alert=True)
         else:
             await CallbackQuery.message.delete()
             logger_text=f"""Starting Playlist
@@ -611,7 +625,7 @@ Group Playlist Playing."""
                         with yt_dlp.YoutubeDL(ytdl_opts) as ytdl:
                             x = ytdl.extract_info(url, download=False)
                     except Exception as e:
-                        return await mystic.edit(f"Failed to download this video.\n\n**Reason**:{e}") 
+                        return await mystic.edit(f"❌ Failed to download this video.\n\n**Reason**:{e}") 
                     title = (x["title"])
                     thumbnail = (x["thumbnail"])
                     def my_hook(d): 
@@ -631,26 +645,26 @@ Group Playlist Playing."""
                                 flex[str(bytesx)] += 1
                                 try:
                                     if eta > 2:
-                                        mystic.edit(f"Downloading {title[:50]}\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
+                                        mystic.edit(f"Downloading {title[:50]}\n\n**File Size:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
                                 except Exception as e:
                                     pass
                             if per > 250:    
                                 if flex[str(bytesx)] == 2:
                                     flex[str(bytesx)] += 1
                                     if eta > 2:     
-                                        mystic.edit(f"Downloading {title[:50]}..\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
+                                        mystic.edit(f"Downloading {title[:50]}..\n\n**File Size:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
                                     print(f"[{videoid}] Downloaded {percentage} at a speed of {speed} | ETA: {eta} seconds")
                             if per > 500:    
                                 if flex[str(bytesx)] == 3:
                                     flex[str(bytesx)] += 1
                                     if eta > 2:     
-                                        mystic.edit(f"Downloading {title[:50]}...\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
+                                        mystic.edit(f"Downloading {title[:50]}...\n\n**File Size:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
                                     print(f"[{videoid}] Downloaded {percentage} at a speed of {speed} | ETA: {eta} seconds")
                             if per > 800:    
                                 if flex[str(bytesx)] == 4:
                                     flex[str(bytesx)] += 1
                                     if eta > 2:    
-                                        mystic.edit(f"Downloading {title[:50]}....\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
+                                        mystic.edit(f"Downloading {title[:50]}....\n\n**File Size:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec")
                                     print(f"[{videoid}] Downloaded {percentage} at a speed of {speed} | ETA: {eta} seconds")
                         if d['status'] == 'finished': 
                             try:
@@ -658,7 +672,7 @@ Group Playlist Playing."""
                             except Exception as e:
                                 taken = "00:00"
                             size = d['_total_bytes_str']
-                            mystic.edit(f"**📥 Downloaded {title[:50]}.....**\n\n**📚 FileSize:** {size}\n**⚡ Time Taken:** {taken} sec\n\n**📑 Converting Flicks File**")
+                            mystic.edit(f"**Downloaded {title[:50]}.....**\n\n**File Size:** {size}\n**Time Taken:** {taken} sec\n\n**Converting File** [__FFmpeg processing__]")
                             print(f"[{videoid}] Downloaded| Elapsed: {taken} seconds")  
                     loop = asyncio.get_event_loop()
                     xx = await loop.run_in_executor(None, download, url, my_hook)
@@ -682,7 +696,7 @@ Group Playlist Playing."""
                     m = await CallbackQuery.message.reply_photo(
                     photo=thumb,
                     reply_markup=InlineKeyboardMarkup(buttons),    
-                    caption=(f"🎥<b>__Playing:__ </b>[{title[:25]}]({url}) \n⏳<b>__Duration:__</b> {duration} \n⚡<b>__Info:__</b> [Get Additional Information](https://t.me/{BOT_USERNAME}?start=info_{videoid})\n👤**__Requested by:__** {checking}")
+                    caption=(f"🎥 <b>__Playing:__ </b>[{title[:25]}]({url}) \n⏳ <b>__Duration:__</b> {duration} \n💡 <b>__Info:__</b> [More Information](https://t.me/{BOT_USERNAME}?start=info_{videoid})\n👤**__Requested by:__** {checking}")
                 )   
                     os.remove(thumb)
                     await CallbackQuery.message.delete()
@@ -705,7 +719,7 @@ Group Playlist Playing."""
                     a1,
                 ],
                 [
-                    InlineKeyboardButton(text="🗑 Close Menu​", callback_data=f'close2')
+                    InlineKeyboardButton(text="🗑 Close Menu", callback_data=f'close2')
                 ]    
             ]
         )
@@ -728,7 +742,7 @@ async def group_playlist(_,CallbackQuery):
     await CallbackQuery.answer()
     a = await app.get_chat_member(CallbackQuery.message.chat.id , CallbackQuery.from_user.id)
     if not a.can_manage_voice_chats:
-        return await CallbackQuery.answer("You don't have the required permission to perform this action.\nPermission: MANAGE VOICE CHATS", show_alert=True)
+        return await CallbackQuery.answer("❌ You don't have the required permission to perform this action.\nPermission: MANAGE VOICE CHATS", show_alert=True)
     callback_data = CallbackQuery.data.strip()
     chat_id = CallbackQuery.message.chat.id
     callback_request = callback_data.split(None, 1)[1]
@@ -736,7 +750,7 @@ async def group_playlist(_,CallbackQuery):
     try:
         url,smex= callback_request.split("|") 
     except Exception as e:
-        return await CallbackQuery.message.edit(f"Error Occured\n**Possible reason could be**: {e}")
+        return await CallbackQuery.message.edit(f"❌ Error Occured\n**Possible reason could be**: {e}")
     Name = CallbackQuery.from_user.first_name
     _count = await get_note_names(chat_id)
     count = 0
@@ -749,7 +763,7 @@ async def group_playlist(_,CallbackQuery):
             count += 1   
     count = int(count)
     if count == 30:
-        return await CallbackQuery.message.reply_text("Sorry! You can only have 30 music in group playlist.")
+        return await CallbackQuery.message.reply_text("❌ Sorry! You can only have 30 music in group playlist.")
     try:
         url = (f"https://www.youtube.com/watch?v={url}")
         results = VideosSearch(url, limit=1)
@@ -758,7 +772,7 @@ async def group_playlist(_,CallbackQuery):
             duration = (result["duration"])
             videoid = (result["id"])
     except Exception as e:
-            return await CallbackQuery.message.reply_text(f"Some Error Occured.\n**Possible Reason:** {e}") 
+            return await CallbackQuery.message.reply_text(f"❌ Some Error Occured.\n**Possible Reason:** {e}") 
     _check = await get_playlist(chat_id, videoid)
     title = title[:50]
     if _check:
@@ -770,7 +784,7 @@ async def group_playlist(_,CallbackQuery):
     }
     await save_playlist(chat_id, videoid, assis)
     Name = CallbackQuery.from_user.first_name
-    return await CallbackQuery.message.reply_text(f"Added to Group's Playlist by {Name}")
+    return await CallbackQuery.message.reply_text(f"✅ Added to Group's Playlist by {Name}")
   
 
 @Client.on_callback_query(filters.regex("playlist"))
@@ -783,12 +797,12 @@ async def pla_playylistt(_,CallbackQuery):
     try:
         url,smex= callback_request.split("|") 
     except Exception as e:
-        return await CallbackQuery.message.edit(f"Error Occured\n**Possible reason could be**:{e}")
+        return await CallbackQuery.message.edit(f"❌ Error Occured\n**Possible reason could be**:{e}")
     Name = CallbackQuery.from_user.first_name
     _count = await get_note_names(userid)
     count = 0
     if not _count:
-        sex = await CallbackQuery.message.reply_text("**Welcome To Music's Playlist Feature.**\n\n**Generating Your Playlist In Database...Please wait.**")
+        sex = await CallbackQuery.message.reply_text("Welcome To Music's Playlist Feature.\n\nGenerating Your Playlist In Database...Please wait.")
         await asyncio.sleep(2)
         await sex.delete()
     else:
@@ -799,7 +813,7 @@ async def pla_playylistt(_,CallbackQuery):
         if userid in SUDOERS:
             pass
         else:
-            return await CallbackQuery.message.reply_text("Sorry! You can only have 30 music in your playlist.")
+            return await CallbackQuery.message.reply_text("❌ Sorry! You can only have 30 music in your playlist.")
     try:
         url = (f"https://www.youtube.com/watch?v={url}")
         results = VideosSearch(url, limit=1)
@@ -808,7 +822,7 @@ async def pla_playylistt(_,CallbackQuery):
             duration = (result["duration"])
             videoid = (result["id"])
     except Exception as e:
-            return await CallbackQuery.message.reply_text(f"Some Error Occured.\n**Possible Reason:**{e}") 
+            return await CallbackQuery.message.reply_text(f"❌ Some Error Occured.\n**Possible Reason:**{e}") 
     _check = await get_playlist(userid, videoid)
     if _check:
          return await CallbackQuery.message.reply_text(f"{Name}, Its already in the Playlist!") 
@@ -827,7 +841,7 @@ async def pla_playylistt(_,CallbackQuery):
 async def P_list(_,CallbackQuery):
     _playlist = await get_note_names(CallbackQuery.from_user.id)
     if not _playlist:
-        return await CallbackQuery.answer(f"You have no Personal Playlist on servers. Try adding musics in playlist.", show_alert=True)
+        return await CallbackQuery.answer(f"❌ You have no Personal Playlist on servers, Try adding musics in playlist.", show_alert=True)
     else:
         j = 0
         await CallbackQuery.answer()
@@ -849,7 +863,7 @@ async def P_list(_,CallbackQuery):
         user_id = CallbackQuery.from_user.id
         user_name = CallbackQuery.from_user.first_name
         a2 = InlineKeyboardButton(text=f"Play {user_name[:17]}'s Playlist", callback_data=f'play_playlist {user_id}|personal')
-        a3 = InlineKeyboardButton(text=f"📨 Check Playlist", url=urlxp)
+        a3 = InlineKeyboardButton(text=f"🔗 Check Playlist", url=urlxp)
         key = InlineKeyboardMarkup(
             [
                 [
@@ -857,7 +871,7 @@ async def P_list(_,CallbackQuery):
                 ],
                 [
                     a3,
-                    InlineKeyboardButton(text="🗑 Close", callback_data=f'close2')
+                    InlineKeyboardButton(text="🗑 Close Menu", callback_data=f'close2')
                 ]    
             ]
         )
@@ -883,7 +897,7 @@ async def G_list(_,CallbackQuery):
     user_id = CallbackQuery.from_user.id
     _playlist = await get_note_names(CallbackQuery.message.chat.id)
     if not _playlist:
-        return await CallbackQuery.answer(f"You have no Group Playlist on servers. Try adding musics in playlist.", show_alert=True)
+        return await CallbackQuery.answer(f"❌ You have no Group Playlist on servers, Try adding musics in playlist.", show_alert=True)
     else:
         await CallbackQuery.answer()
         j = 0
@@ -904,7 +918,7 @@ async def G_list(_,CallbackQuery):
         user_id = CallbackQuery.from_user.id
         user_name = CallbackQuery.from_user.first_name
         a1 = InlineKeyboardButton(text=f"Play Group's Playlist", callback_data=f'play_playlist {user_id}|group')
-        a3 = InlineKeyboardButton(text=f"📨 Check Playlist", url=urlxp)
+        a3 = InlineKeyboardButton(text=f"🔗 Check Playlist", url=urlxp)
         key = InlineKeyboardMarkup(
             [
                 [
@@ -912,7 +926,7 @@ async def G_list(_,CallbackQuery):
                 ],
                 [
                     a3,
-                    InlineKeyboardButton(text="🗑 Close ", callback_data=f'close2')
+                    InlineKeyboardButton(text="🗑 Close Menu", callback_data=f'close2')
                 ]    
             ]
         )
@@ -935,17 +949,17 @@ async def G_list(_,CallbackQuery):
 async def cbgroupdel(_,CallbackQuery):  
     a = await app.get_chat_member(CallbackQuery.message.chat.id , CallbackQuery.from_user.id)
     if not a.can_manage_voice_chats:
-        return await CallbackQuery.answer("You don't have the required permission to perform this action.\nPermission: MANAGE VOICE CHATS", show_alert=True)
+        return await CallbackQuery.answer("❌ You don't have the required permission to perform this action.\nPermission: MANAGE VOICE CHATS", show_alert=True)
     await CallbackQuery.message.delete() 
     await CallbackQuery.answer()
     _playlist = await get_note_names(CallbackQuery.message.chat.id)                                    
     if not _playlist:
-        return await CallbackQuery.message.reply_text("Group has no Playlist on Music's Server")
+        return await CallbackQuery.message.reply_text("❌ Group has no Playlist on Yukki's Server")
     else:
         titlex = []
         for note in _playlist:
             await delete_playlist(CallbackQuery.message.chat.id, note)
-    await CallbackQuery.message.reply_text("Successfully deleted your Group's whole playlist")  
+    await CallbackQuery.message.reply_text("✅ Successfully deleted your Group's whole playlist")  
     
     
 @Client.on_callback_query(filters.regex("cbdel"))
@@ -954,9 +968,9 @@ async def delplcb(_,CallbackQuery):
     await CallbackQuery.message.delete() 
     _playlist = await get_note_names(CallbackQuery.from_user.id)                                    
     if not _playlist:
-        return await CallbackQuery.message.reply_text("You have no Playlist on Music's Server")
+        return await CallbackQuery.message.reply_text("❌ You have no Playlist on Yukki's Server")
     else:
         titlex = []
         for note in _playlist:
             await delete_playlist(CallbackQuery.from_user.id, note)
-    await CallbackQuery.message.reply_text("Successfully deleted your whole playlist")
+    await CallbackQuery.message.reply_text("✅ Successfully deleted your whole playlist")
