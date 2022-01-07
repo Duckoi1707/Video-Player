@@ -145,7 +145,7 @@ async def play(_, message: Message):
     if chat_id in BANNED_USERS:
         await app.send_message(
             chat_id,
-            text=f"**❌ Anda telah di ban\nUbtuk menggunakan bot anda harus join di [ɢʀᴏᴜᴘ](https://t.me/{SUPPORT_GROUP})**",
+            text=f"**❌ Bạn đã bị cấm \ nĐể sử dụng bot, bạn phải tham gia [NHÓM](https://t.me/{SUPPORT_GROUP})**",
             reply_to_message_id=message.message_id,
         )
         return
@@ -190,8 +190,8 @@ async def play(_, message: Message):
     if await is_on_off(1):
         LOG_ID = "-1001280688248"
         if int(chat_id) != int(LOG_ID):
-            return await message.reply_text(f">> ❌ Bot is under Maintenance, Sorry for the inconvenience!")
-        return await message.reply_text(f">> ❌ Bot is under Maintenance, Sorry for the inconvenience!")
+            return await message.reply_text(f">> ❌ Bot đang được bảo trì, xin lỗi vì sự bất tiện này!")
+        return await message.reply_text(f">> ❌ Bot đang được bảo trì, xin lỗi vì sự bất tiện này!")
     a = await app.get_chat_member(message.chat.id , BOT_ID)
     if a.status != "administrator":
         await message.reply_text(f"I need to be admin with some permissions:\n\n>> **can_manage_voice_chats:** To manage voice chats\n>> **can_delete_messages:** To delete Music's Searched Waste\n>> **can_invite_users**: For inviting assistant to chat\n>> **can_restrict_members**: For Protecting Music from Spammers.")
