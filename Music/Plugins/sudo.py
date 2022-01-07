@@ -77,7 +77,7 @@ async def userdel(_, message: Message):
     await message.reply_text(f"Something wrong happened.")
 
 
-@app.on_message(filters.command("sudolist"))
+@app.on_message(filters.command(""))
 async def sudoers_list(_, message: Message):
     sudoers = await get_sudoers()
     text = "**Sudo User List**\n\n"
