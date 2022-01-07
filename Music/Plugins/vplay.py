@@ -1,9 +1,8 @@
 import asyncio
 import os
+from Music.MusicUtilities.tgcallsrun import ASS_ACC
 
-from pyrogram import filters
-from pyrogram import Client
-from pyrogram import Client as app
+from pyrogram import Client, filters
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from pytgcalls import StreamType
@@ -15,15 +14,17 @@ from pytgcalls.types.input_stream.quality import (
     MediumQualityVideo,
 )
 from youtubesearchpython import VideosSearch
-
+from Music.config import SUPPORT_GROUP, UPDATES_CHANNEL
 from Music import BOT_NAME, BOT_USERNAME, app
-from Music.config import SUPPORT_GROUP, UPDATES_CHANNEL, GROUP, CHANNEL
+from Music.MusicUtilities.tgcallsrun.music import pytgcalls as call_py
 from Music.MusicUtilities.helpers.filters import command
 from Music.MusicUtilities.helpers.logger import LOG_CHAT
-from Music.MusicUtilities.tgcallsrun import ASS_ACC
-from Music import app
-from Music.MusicUtilities.tgcallsrun.queues import QUEUE, add_to_queue, get_queue
-from Music.MusicUtilities.tgcallsrun.music import pytgcalls as call_py
+from Music.MusicUtilities.tgcallsrun.queues import (
+    QUEUE,
+    add_to_queue,
+    clear_queue,
+    get_queue,
+)
 
 
 def ytsearch(query):
@@ -58,7 +59,7 @@ async def ytdl(link):
 
 
 
-@Client.on_message(command("vplay") & filters.group)
+@app.on_message(command("vplay") & filters.group)
 async def vplay(c: Client, message: Message):
     replied = message.reply_to_message
     chat_id = message.chat.id
@@ -68,14 +69,14 @@ async def vplay(c: Client, message: Message):
     keyboard = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton("Hỗ Trợ", url=f"https://t.me/{GROUP}"),
-                InlineKeyboardButton("Kênh", url=f"https://t.me/{CHANNEL}"),
+                InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ", url=f"https://t.me/{SUPPORT_GROUP}"),
+                InlineKeyboardButton("ᴄʜᴀɴɴᴇʟ", url=f"https://t.me/{UPDATES_CHANNEL}"),
             ]
         ]
     )
     if message.sender_chat:
         return await message.reply_text(
-            "You are **Anonymous Admin!**\n\n» back to user account from admin rights."
+            "Anda adalah **Admin Anonim!**\n\n» kembali ke akun pengguna dari hak admin."
         )
     try:
         aing = await c.get_me()
@@ -85,12 +86,12 @@ async def vplay(c: Client, message: Message):
     if a.status != "administrator":
         await message.reply_text(
             f"""
-To use me I need to be admin with permissions: 
-» Delete message 
-» Block user 
-» Add user 
-» Manage voice chat 
-Powered by : [Premium Music](t.me/{BOT_USERNAME})
+💡 Untuk menggunakan saya, Saya perlu menjadi admin dengan izin:
+» ❌ Hapus pesan
+» ❌ Blokir pengguna
+» ❌ Tambah pengguna
+» ❌ Kelola obrolan suara
+✨ Powered by: [{BOT_NAME}](t.me/{BOT_USERNAME})
 """,
             disable_web_page_preview=True,
         )
@@ -98,9 +99,9 @@ Powered by : [Premium Music](t.me/{BOT_USERNAME})
     if not a.can_manage_voice_chats:
         await message.reply_text(
             f"""
-To use me I need to be admin with permissions: 
-» Manage voice chat 
-Powered by: [{BOT_NAME}](t.me/{BOT_USERNAME})
+💡 Untuk menggunakan saya, Saya perlu menjadi admin dengan izin:
+» ❌ Kelola obrolan suara
+✨ Powered by: [{BOT_NAME}](t.me/{BOT_USERNAME})
 """,
             disable_web_page_preview=True,
         )
@@ -108,10 +109,9 @@ Powered by: [{BOT_NAME}](t.me/{BOT_USERNAME})
     if not a.can_delete_messages:
         await message.reply_text(
             f"""
-To use me I need to be admin with permissions: 
-
-» Delete message 
-Powered by: [Premium Music](t.me/{BOT_USERNAME})
+💡 Untuk menggunakan saya, Saya perlu menjadi admin dengan izin:
+» ❌ Hapus pesan
+✨ Powered by: [{BOT_NAME}](t.me/{BOT_USERNAME})
 """,
             disable_web_page_preview=True,
         )
@@ -119,10 +119,9 @@ Powered by: [Premium Music](t.me/{BOT_USERNAME})
     if not a.can_invite_users:
         await message.reply_text(
             f"""
-💡 To use me, I need to be an admin with permission: 
-
-»❌ Add users 
-Powered by: [Premium Music](t.me/{BOT_USERNAME})
+💡 Untuk menggunakan saya, Saya perlu menjadi admin dengan izin:
+» ❌ Tambah pengguna
+✨ Powered by: [{BOT_NAME}](t.me/{BOT_USERNAME})
 """,
             disable_web_page_preview=True,
         )
@@ -132,7 +131,7 @@ Powered by: [Premium Music](t.me/{BOT_USERNAME})
         b = await c.get_chat_member(chat_id, ubot.id)
         if b.status == "kicked":
             await message.reply_text(
-                f"@{ubot.username} **Banned in the group** {message.chat.title}\n\n» **unban Assistant first if you want to use this bot.**"
+                f"@{ubot.username} **Terkena ban di grup** {message.chat.title}\n\n» **unban Assistant terlebih dahulu jika ingin menggunakan bot ini.**"
             )
             return
     except UserNotParticipant:
@@ -141,7 +140,7 @@ Powered by: [Premium Music](t.me/{BOT_USERNAME})
                 await ASS_ACC.join_chat(message.chat.username)
             except Exception as e:
                 await message.reply_text(
-                    f"❌ **@{ubot.username} Assistant failed to join**\n\n**Reason**: `{e}`"
+                    f"❌ **@{ubot.username} Assistant gagal bergabung**\n\n**Alasan**: `{e}`"
                 )
                 return
         else:
@@ -154,14 +153,14 @@ Powered by: [Premium Music](t.me/{BOT_USERNAME})
                 pass
             except Exception as e:
                 return await message.reply_text(
-                    f"❌ **@{ubot.username} Assistant failed to join**\n\n**Reason**: `{e}`"
+                    f"❌ **@{ubot.username} Assistant gagal bergabung**\n\n**Alasan**: `{e}`"
                 )
 
     if replied:
         if replied.video or replied.document:
             what = "Audio Searched"
             await LOG_CHAT(message, what)
-            loser = await replied.reply("📥 **Downloading Video...**")
+            loser = await replied.reply("📥 **Mengunduh Video...**")
             dl = await replied.download()
             link = replied.link
             if len(message.command) < 2:
@@ -173,15 +172,13 @@ Powered by: [Premium Music](t.me/{BOT_USERNAME})
                 else:
                     Q = 720
                     await loser.edit(
-                        "» **Only 720, 480, 360 allowed** \n💡 **Now Streaming Video In 720p**"
+                        "» **Hanya 720, 480, 360 yang diizinkan** \n💡 **Sekarang Streaming Video Dalam 720p**"
                     )
             try:
                 if replied.video:
                     songname = replied.video.file_name[:70]
-                    duration = replied.video.duration
                 elif replied.document:
                     songname = replied.document.file_name[:70]
-                    duration = replied.document.duration
             except BaseException:
                 songname = "Video"
 
@@ -192,11 +189,10 @@ Powered by: [Premium Music](t.me/{BOT_USERNAME})
                 await app.send_message(
                     chat_id,
                     f"""
-**Track added to queue** 
-
-**Name:** [{songname[:999]}]({link}) 
-🎧 **On request:** {requester} 
-#️⃣ **Queue position** {pos}
+💡 **Trek ditambahkan ke antrian**
+🏷 **Nama:** [{songname[:999]}]({link})
+🎧 **Atas permintaan:** {requester}
+#️⃣ **Posisi antrian** {pos}
 """,
                     disable_web_page_preview=True,
                     reply_markup=keyboard,
@@ -223,12 +219,10 @@ Powered by: [Premium Music](t.me/{BOT_USERNAME})
                 await app.send_message(
                     chat_id,
                     f"""
-▶️ __Playing Video__
-
-🏷 **Name:** [{songname[:999]}]({link})
-🎧 **Requested By:** {requester}
-
-💬 **Played on:** {message.chat.title}
+▶️ **Streaming video dimulai**
+🏷 **Nama:** [{songname[:999]}]({link})
+🎧 **Atas permintaan:** {requester}
+💬 **Diputar di:** {message.chat.title}
 """,
                     disable_web_page_preview=True,
                     reply_markup=keyboard,
@@ -237,18 +231,18 @@ Powered by: [Premium Music](t.me/{BOT_USERNAME})
     else:
         if len(message.command) < 2:
             await message.reply(
-                "**Usage:.** /vplay [title Or Reply to a audio file] "
+                "» Balas ke **file video** atau **berikan sesuatu untuk ditelusuri.**"
             )
         else:
             what = "Query Given"
             await LOG_CHAT(message, what)
-            loser = await message.reply("🔎 **Searching**")
+            loser = await message.reply("🔎 **Pencarian**")
             query = message.text.split(None, 1)[1]
             search = ytsearch(query)
             Q = 480
             amaze = HighQualityVideo()
             if search == 0:
-                await loser.edit("**No results found.**")
+                await loser.edit("❌ **Tidak ada hasil yang ditemukan.**")
             else:
                 songname = search[0]
                 url = search[1]
@@ -256,7 +250,7 @@ Powered by: [Premium Music](t.me/{BOT_USERNAME})
                 thumbnail = search[3]
                 veez, ytlink = await ytdl(url)
                 if veez == 0:
-                    await loser.edit(f"❌ yt-dl problem detected\n\n» `{ytlink}`")
+                    await loser.edit(f"❌ yt-dl masalah terdeteksi\n\n» `{ytlink}`")
                 else:
                     if chat_id in QUEUE:
                         pos = add_to_queue(chat_id, songname, ytlink, url, "Video", Q)
@@ -265,13 +259,11 @@ Powered by: [Premium Music](t.me/{BOT_USERNAME})
                         await app.send_message(
                                 chat_id,
                                 f"""
-💡 **Tracks added to Queue**
-
-🏷 **Name:** [{songname[:999]}]({url})
-⏱️ **Duration:** {duration}
-🎧 **Requested by:** {requester}
-
-#️⃣ **At position** {pos}
+💡 **Trek ditambahkan ke antrian**
+🏷 **Nama:** [{songname[:999]}]({url})
+⏱️ **Durasi:** {duration}
+🎧 **Atas permintaan:** {requester}
+#️⃣ **Posisi antrian** {pos}
 """,
                             disable_web_page_preview=True,
                             reply_markup=keyboard,
@@ -293,13 +285,11 @@ Powered by: [Premium Music](t.me/{BOT_USERNAME})
                             await app.send_message(
                                 chat_id,
                                 f"""
-▷ __Playing Video__
-
-🏷 **Name:** [{songname[:999]}]({url})
-⏱️ **Duration:** {duration}
-🎧 **Requested By:** {requester}
-
-💬 **Playing On:** {message.chat.title}
+▷ **Memutar video dimulai**
+🏷 **Nama:** [{songname[:999]}]({url})
+⏱️ **Durasi:** {duration}
+🎧 **Atas permintaan:** {requester}
+💬 **Diputar di:** {message.chat.title}
 """,
                                 disable_web_page_preview=True,
                                 reply_markup=keyboard,
@@ -309,7 +299,7 @@ Powered by: [Premium Music](t.me/{BOT_USERNAME})
                             await message.reply_text(f"Error: `{ep}`")
 
 
-@Client.on_message(command("vplaylist") & filters.group)
+@app.on_message(command("vplaylist") & filters.group)
 async def playlist(client, m: Message):
     chat_id = m.chat.id
     if chat_id in QUEUE:
@@ -317,11 +307,11 @@ async def playlist(client, m: Message):
         if len(chat_queue) == 1:
             await m.delete()
             await m.reply(
-                f"**🎧 NOW PLAYING:** \n[{chat_queue[0][0]}]({chat_queue[0][2]}) | `{chat_queue[0][3]}`",
+                f"**🎧 SEKARANG MEMUTAR:** \n[{chat_queue[0][0]}]({chat_queue[0][2]}) | `{chat_queue[0][3]}`",
                 disable_web_page_preview=True,
             )
         else:
-            QUE = f"**🎧 NOW PLAYING:** \n[{chat_queue[0][0]}]({chat_queue[0][2]}) | `{chat_queue[0][3]}` \n\n**⏯ QUEUE LIST:**"
+            QUE = f"**🎧 SEKARANG MEMUTAR:** \n[{chat_queue[0][0]}]({chat_queue[0][2]}) | `{chat_queue[0][3]}` \n\n**⏯ DAFTAR ANTRIAN:**"
             l = len(chat_queue)
             for x in range(1, l):
                 hmm = chat_queue[x][0]
@@ -330,4 +320,4 @@ async def playlist(client, m: Message):
                 QUE = QUE + "\n" + f"**#{x}** - [{hmm}]({hmmm}) | `{hmmmm}`\n"
             await m.reply(QUE, disable_web_page_preview=True)
     else:
-        await m.reply("**❌ Doesn't play anything**")
+        await m.reply("**❌ Tidak memutar apapun**")
