@@ -46,8 +46,7 @@ async def load_start():
             await remove_active_chat(served_chat)
         except Exception:
             print("Error came while clearing db")
-    await app.send_message(LOG_GROUP_ID, "Bot Started")
-    await client.send_message(LOG_GROUP_ID, "Assistant Started")
+    await client.send_message(LOG_GROUP_ID, "Người Dùng Đã Khởi Động")
     await client.join_chat("Superior_Bots")
     print("[INFO]: STARTED")
 
