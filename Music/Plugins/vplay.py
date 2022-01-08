@@ -315,7 +315,7 @@ async def playlist(client, m: Message):
                 disable_web_page_preview=True,
             )
         else:
-            QUE = f"**🎧 CHƠI NGAY BÂY GIỜ:** \n[{chat_queue[0][0]}]({chat_queue[0][2]}) | `{chat_queue[0][3]}` \n\n**⏯ DAFTAR ANTRIAN:**"
+            QUE = f"**🎧 CHƠI NGAY BÂY GIỜ:** \n[{chat_queue[0][0]}]({chat_queue[0][2]}) | `{chat_queue[0][3]}` \n\n**⏯ DANH SÁCH QUEUE:**"
             l = len(chat_queue)
             for x in range(1, l):
                 hmm = chat_queue[x][0]
