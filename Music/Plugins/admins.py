@@ -178,7 +178,7 @@ async def stop_cmd(_, message):
         task_done(chat_id)
         if is_empty(chat_id):
             await remove_active_chat(chat_id)
-            await message.reply_text("No more music in __Queue__ \n\nLeaving Voice Chat")
+            await message.reply_text("Không còn nhạc trong __Queue__ \n\n Rời khỏi Voice Chat")
             await music.pytgcalls.leave_group_call(chat_id)
             return  
         else:
