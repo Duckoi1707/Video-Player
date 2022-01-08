@@ -5,8 +5,7 @@ from Music.MusicUtilities.database.sudo import add_sudo, get_sudoers, remove_sud
 from pyrogram import filters
 from pyrogram.types import Message
 
-
-@app.on_message(filters.command("addsudo") & filters.user(OWNER))
+@app.on_message(filters.command("addsudắ32312312do") & filters.user(OWNER))
 async def useradd(_, message: Message):
     if not message.reply_to_message:
         if len(message.command) != 2:
@@ -44,7 +43,7 @@ async def useradd(_, message: Message):
     return
 
 
-@app.on_message(filters.command("delsudo") & filters.user(OWNER))
+@app.on_message(filters.command("delsud321312o") & filters.user(OWNER))
 async def userdel(_, message: Message):
     if not message.reply_to_message:
         if len(message.command) != 2:
