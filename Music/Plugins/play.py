@@ -138,8 +138,8 @@ async def play(_, message: Message):
     if message.sender_chat:
         return await message.reply_text(
             """
-Bạn là một quản trị viên ẩn danh!
-Hoàn nguyên về Tài khoản Người dùng Từ Quyền của Quản trị viên.
+You are an Anonymous Admin!
+Revert back to User Account From Admin Rights.
 """
         )
     user_id = message.from_user.id
@@ -150,40 +150,40 @@ Hoàn nguyên về Tài khoản Người dùng Từ Quyền của Quản trị v
         LOG_ID = "-100156899495"
         if int(chat_id) != int(LOG_ID):
             return await message.reply_text(
-                f"Bot đang được bảo trì"
+                f"Bot is under Maintenance. Sorry for the inconvenience!"
             )
         return await message.reply_text(
-            f"Bot đang được bảo trì"
+            f"Bot is under Maintenance. Sorry for the inconvenience!"
         )
     a = await app.get_chat_member(message.chat.id, BOT_ID)
     if a.status != "administrator":
         await message.reply_text(
             """
-Tôi cần phải là quản trị viên với một số quyền:
+I need to be an admin with some permissions:
 
-- ** có thể quản lý trò chuyện thoại: ** Để quản lý trò chuyện thoại
-- ** có thể xóa tin nhắn: ** Để xóa Nhạc đã tìm kiếm rác
-- ** có thể mời người dùng **: Để mời trợ lý trò chuyện
-- ** có thể hạn chế thành viên **: Để Bảo vệ Nhạc khỏi Thư rác.
+- **can manage voice chat:** To manage voice chat
+- **can delete messages:** To delete Music Searched Junk
+- **can invite users**: To invite assistant to chat
+- **can restrict members**: To Protect Music from Spam.
 """
         )
         return
     if not a.can_manage_voice_chats:
         await message.reply_text(
-            "Tôi không có quyền cần thiết để thực hiện hành động này."
-            + "\n❌ QUẢN LÝ TRÒ CHUYỆN GIỌNG NÓI"
+            "I don't have the necessary permissions to perform this action."
+            + "\n❌ MANAGING VOICE CHATS"
         )
         return
     if not a.can_delete_messages:
         await message.reply_text(
-           "Tôi không có quyền cần thiết để thực hiện hành động này."
-            + "\n❌ XÓA THÔNG ĐIỆP"
+            "I don't have the necessary permissions to perform this action."
+            + "\n❌ DELETE MESSAGE"
         )
         return
     if not a.can_invite_users:
         await message.reply_text(
-            "Tôi không có quyền cần thiết để thực hiện hành động này."
-            + "\n❌ MỜI NGƯỜI DÙNG QUA LIÊN KẾT"
+            "I don't have the required permission to perform this action."
+            + "\n❌ INVITE USERS THROUGH LINK"
         )
         return
     try:
@@ -191,9 +191,9 @@ Tôi cần phải là quản trị viên với một số quyền:
         if b.status == "kicked":
             await message.reply_text(
                 f"""
-{ASSNAME}(@{ASSUSERNAME}) bị cấm trong cuộc trò chuyện của bạn **{chat_title}**
+{ASSNAME}(@{ASSUSERNAME}) banned in your chat **{chat_title}**
 
-Bỏ cấm sử dụng trước
+Unban first to use
 """
             )
             return
@@ -202,14 +202,14 @@ Bỏ cấm sử dụng trước
             try:
                 await ASS_ACC.join_chat(f"{message.chat.username}")
                 await message.reply(
-                    f"{ASSNAME} Đã tham gia thành công",
+                    f"{ASSNAME} Successfully Joined",
                 )
                 await remove_active_chat(chat_id)
             except Exception as e:
                 await message.reply_text(
                     f"""
-** Trợ lý không tham gia được **
-**Lý do**:{e}
+**Assistant Failed to Join**
+**Reason**:{e}
 """
                 )
                 return
@@ -220,15 +220,15 @@ Bỏ cấm sử dụng trước
                     kontol = (invite_link.replace("+", "")).split("t.me/")[1]
                     link_bokep = f"https://t.me/joinchat/{kontol}"
                 await ASS_ACC.join_chat(link_bokep)
-                await message.reply(f"{ASSNAME} Đã tham gia thành công",)
+                await message.reply(f"{ASSNAME} Successfully Joined",)
                 await remove_active_chat(chat_id)
             except UserAlreadyParticipant:
                 pass
             except Exception as e:
                 return await message.reply_text(
                     f"""
-** Trợ lý không tham gia được **
-**Lý do**:{e}
+**Assistant Failed to Join**
+**Reason**:{e}
 """
                 )
     audio = (
@@ -243,7 +243,7 @@ Bỏ cấm sử dụng trước
         what = "Audio Searched"
         await LOG_CHAT(message, what)
         mystic = await message.reply_text(
-            f"**Xử lý Tệp Âm thanh Đã Trả lời Ur bằng {username}**"
+            f"**🔄 Processing Ur Replied Audio File by {username}**"
         )
         if audio.file_size > 157286400:
             await mystic.edit_text("Less Than 150 mb")
@@ -301,16 +301,16 @@ Bỏ cấm sử dụng trước
         if smex > DURATION_LIMIT:
             return await mystic.edit_text(
                 f"""
-**Lỗi thời lượng**
+**Duration Error**
 
-**Thời lượng được phép:** {DURATION_LIMIT}
-**Thời lượng đã nhận:** {duration}
+**Duration Allowed:** {DURATION_LIMIT}
+**Received Duration:** {duration}
 """
             )
         if duration == "None":
-            return await mystic.edit_text("Xin lỗi! Video trực tiếp không được hỗ trợ")
+            return await mystic.edit_text("Sorry! Live video is not Supported")
         if views == "None":
-            return await mystic.edit_text("Xin lỗi! Video trực tiếp không được hỗ trợ")
+            return await mystic.edit_text("Sorry! Live video is not Supported")
         semxbabes = f"Downloading {title[:50]}"
         await mystic.edit(semxbabes)
         theme = random.choice(themes)
@@ -337,7 +337,7 @@ Bỏ cấm sử dụng trước
                     try:
                         if eta > 2:
                             mystic.edit(
-                                f"Đang tải xuống {title[:50]}\n\n**Kích thước tập tin:** {size}\n**Đã tải xuống:** {percentage}\n**Tốc Độ:** {speed}\n**ETA:** {eta} Giây"
+                                f"Downloading {title[:50]}\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec"
                             )
                     except Exception:
                         pass
@@ -346,7 +346,7 @@ Bỏ cấm sử dụng trước
                         flex[str(bytesx)] += 1
                         if eta > 2:
                             mystic.edit(
-                                f"Đang tải xuống {title[:50]}\n\n**Kích thước tập tin:** {size}\n**Đã tải xuống:** {percentage}\n**Tốc Độ:** {speed}\n**ETA:** {eta} Giây"
+                                f"Downloading {title[:50]}..\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec"
                             )
                         print(
                             f"[{videoid}] Downloaded {percentage} at a speed of {speed} | ETA: {eta} seconds"
@@ -356,17 +356,17 @@ Bỏ cấm sử dụng trước
                         flex[str(bytesx)] += 1
                         if eta > 2:
                             mystic.edit(
-                                f"Đang tải xuống {title[:50]}\n\n**Kích thước tập tin:** {size}\n**Đã tải xuống:** {percentage}\n**Tốc Độ:** {speed}\n**ETA:** {eta} Giây"
+                                f"Downloading {title[:50]}...\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec"
                             )
                         print(
-                            f"[{videoid}] Đã tải xuống {percentage} với tốc độ {speed} | ETA: {eta} giây"
+                            f"[{videoid}] Downloaded {percentage} at a speed of {speed} | ETA: {eta} seconds"
                         )
                 if per > 800:
                     if flex[str(bytesx)] == 4:
                         flex[str(bytesx)] += 1
                         if eta > 2:
                             mystic.edit(
-                                f"Đang tải xuống {title[:50]}\n\n**Kích thước tập tin:** {size}\n**Đã tải xuống:** {percentage}\n**Tốc Độ:** {speed}\n**ETA:** {eta} Giây"
+                                f"Downloading {title[:50]}....\n\n**FileSize:** {size}\n**Downloaded:** {percentage}\n**Speed:** {speed}\n**ETA:** {eta} sec"
                             )
                         print(
                             f"[{videoid}] Downloaded {percentage} at a speed of {speed} | ETA: {eta} seconds"
@@ -378,7 +378,7 @@ Bỏ cấm sử dụng trước
                     taken = "00:00"
                 size = d["_total_bytes_str"]
                 mystic.edit(
-                    f"**Đã tải xuống {title[:50]}.....**\n\n**Kích thước tập tin:** {size}\n**Mất thời gian:** {taken} sec\n\n**Chuyển đổi tệp tin**[__Xử lý FFmpeg__]"
+                    f"**Downloaded {title[:50]}.....**\n\n**FileSize:** {size}\n**Time Taken:** {taken} sec\n\n**Converting File**[__FFmpeg processing__]"
                 )
                 print(f"[{videoid}] Downloaded| Elapsed: {taken} seconds")
 
@@ -392,17 +392,17 @@ Bỏ cấm sử dụng trước
             message.from_user.first_name
             hmo = await message.reply_text(
                 """
-<b>❌ Không tìm thấy bài hát hoặc bạn viết không chính xác tên bài hát
+<b>❌ Song not found or you did not write the song title correctly
 
-✅ Ví dụ về việc sử dụng một lệnh
-`/play tên bài hát`
+✅ Example of Using a Boat 
+`/play Song Name`
 """,
             )
             return
         what = "Query Given"
         await LOG_CHAT(message, what)
         query = message.text.split(None, 1)[1]
-        mystic = await message.reply_text("**🔎 `Tìm kiếm`**")
+        mystic = await message.reply_text("**🔎 `Searching`**")
         try:
             a = VideosSearch(query, limit=5)
             result = (a.result()).get("result")
@@ -428,7 +428,7 @@ Bỏ cấm sử dụng trước
         thumb ="cache/IMG_20211105_143948_192.jpg"
         buttons = search_markup(ID1, ID2, ID3, ID4, ID5, duration1, duration2, duration3, duration4, duration5, user_id, query)
         await mystic.edit( 
-            f"**✨ Vui lòng chọn bài hát bạn muốn chơi**\n\n¹ <b>{title1[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID1})__</u>\n\n² <b>{title2[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID2})__</u>\n\n³ <b>{title3[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID3})__</u>\n\n⁴ <b>{title4[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID4})__</u>\n\n⁵ <b>{title5[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID5})__</u>",    
+            f"**✨ Please select the song you want to play**\n\n¹ <b>{title1[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID1})__</u>\n\n² <b>{title2[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID2})__</u>\n\n³ <b>{title3[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID3})__</u>\n\n⁴ <b>{title4[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID4})__</u>\n\n⁵ <b>{title5[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID5})__</u>",    
             reply_markup=InlineKeyboardMarkup(buttons),
             disable_web_page_preview=True
         )  
@@ -463,13 +463,13 @@ Bỏ cấm sử dụng trước
         await message.reply_photo(
             photo=thumb,
             caption=f"""
-<b>💡 Các tuyến đường đã được thêm vào hàng đợi</b>
+<b>💡 Tracks added to queue</b>
 
-<b>🏷️ Tên Bài Hát: [{title[:25]}]({link})</b>
-<b>⏱️ Thời Lượng:</b> {duration} \n
-<b>🎧 Yêu Cầu Bởi : </b>{checking}
+<b>🏷️ Name: [{title[:25]}]({link})</b>
+<b>⏱️ Duration:</b> {duration} \n
+<b>🎧 Requested By : </b>{checking}
 
-<b>#️⃣ Hàng Đợi  </b> {position}
+<b>#️⃣ On Position </b> {position}
 """,
             reply_markup=InlineKeyboardMarkup(buttons),
         )
@@ -504,9 +504,9 @@ Bỏ cấm sử dụng trước
             photo=thumb,
             reply_markup=InlineKeyboardMarkup(buttons),
             caption=f"""
-<b>🏷 __Đang chơi__:</b> [{title[:25]}]({link})
-<b>⏱️ Khoảng thời gian:</b> {duration}
-<b>🎧 Được yêu cầu bởi :</b> {checking}
+<b>🏷 __Playing__:</b> [{title[:25]}]({link})
+<b>⏱️ Duration:</b> {duration}
+<b>🎧 Requested By :</b> {checking}
 """,
         )
         return await mystic.delete()
@@ -541,9 +541,9 @@ async def startyuplay(_, CallbackQuery):
     if smex > DURATION_LIMIT:
         await CallbackQuery.message.reply_text(
             f"""
-**Lỗi thời lượng** 
-**Thời lượng được phép: {DURATION_LIMIT}** 
-**Thời lượng đã nhận:** {duration}
+**Duration Error** 
+**Allowed Duration: {DURATION_LIMIT}** 
+**Received Duration:** {duration}
 """
         )
         return
@@ -552,7 +552,7 @@ async def startyuplay(_, CallbackQuery):
             x = ytdl.extract_info(url, download=False)
     except Exception as e:
         return await CallbackQuery.message.reply_text(
-            f"Đã gửi để tải xuống video này..\n\n**Lý do**: {e}"
+            f"Failed to download this video..\n\n**Reason**: {e}"
         )
     title = x["title"]
     mystic = await CallbackQuery.message.reply_text(f"Downloading {title[:50]}")
@@ -653,13 +653,13 @@ async def startyuplay(_, CallbackQuery):
         m = await CallbackQuery.message.reply_photo(
             photo=thumb,
             caption=f"""
-<b>💡 Các tuyến đường đã được thêm vào hàng đợi</b>
+<b>💡 Tracks added to queue</b>
 
-<b>🏷 Tên Bài Hát:</b>[{title[:25]}]({url})
-<b>⏱️ khoảng thời gian:</b> {duration}
-<b>💡</b> [Thêm thông tin](https://t.me/{BOT_USERNAME}?start=info_{id})
-<b>🎧 Được yêu cầu bởi:</b> {checking}
-<b>✨ Được yêu cầu bởi:</b> {position}
+<b>🏷 Name:</b>[{title[:25]}]({url})
+<b>⏱️ Duration:</b> {duration}
+<b>💡</b> [More Information](https://t.me/{BOT_USERNAME}?start=info_{id})
+<b>🎧 Requested By:</b> {checking}
+<b>✨ Requested By:</b> {position}
 """,
             reply_markup=InlineKeyboardMarkup(buttons),
         )
@@ -683,10 +683,10 @@ async def startyuplay(_, CallbackQuery):
             photo=thumb,
             reply_markup=InlineKeyboardMarkup(buttons),
             caption=f"""
-<b>🏷 __Đang chơi__:</b> [{title[:25]}]({url})
-<b>⏱️ khoảng thời gian:</b> {duration}
-<b>💡</b> [Thêm thông tin](https://t.me/{BOT_USERNAME}?start=info_{id})
-<b>🎧 Được yêu cầu bởi:</b> {checking}
+<b>🏷 __Playing__:</b> [{title[:25]}]({url})
+<b>⏱️ Duration:</b> {duration}
+<b>💡</b> [More Information](https://t.me/{BOT_USERNAME}?start=info_{id})
+<b>🎧 Requested By:</b> {checking}
 """,
         )
         os.remove(thumb)
@@ -702,9 +702,9 @@ async def popat(_,CallbackQuery):
     try:
         id , query, user_id = callback_request.split("|") 
     except Exception as e:
-        return await CallbackQuery.message.edit(f"Đã xảy ra lỗi\n ** Các lý do có thể là**:{e}")       
+        return await CallbackQuery.message.edit(f"Terjadi Kesalahan\n**Kemungkinan alasannya adalah**:{e}")       
     if CallbackQuery.from_user.id != int(user_id):
-        return await CallbackQuery.answer("Cái này không dành cho bạn! Tìm kiếm bài hát của riêng bạn", show_alert=True)
+        return await CallbackQuery.answer("This is not for you! Search You Own Song", show_alert=True)
     i=int(id)
     query = str(query)
     try:
@@ -741,11 +741,11 @@ async def popat(_,CallbackQuery):
         ID9 = (result[8]["id"])
         ID10 = (result[9]["id"])                    
     except Exception as e:
-        return await mystic.edit_text(f"Không tìm thấy bài hát.\n ** Lý do có thể có:**{e}")
+        return await mystic.edit_text(f"Lagu Tidak Ditemukan.\n**Kemungkinan Alasan:**{e}")
     if i == 1:
         buttons = search_markup2(ID6, ID7, ID8, ID9, ID10, duration6, duration7, duration8, duration9, duration10 ,user_id, query)
         await CallbackQuery.edit_message_text(
-            f"**✨ Vui lòng chọn bài hát bạn muốn chơi**⁶ <b>{title6[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID6})__</u>\n\n⁷ <b>{title7[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID7})__</u>\n\n⁸ <b>{title8[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID8})__</u>\n\n⁹ <b>{title9[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID9})__</u>\n\n¹⁰ <b>{title10[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID10})__</u>",    
+            f"**✨ Please select the song you want to play**⁶ <b>{title6[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID6})__</u>\n\n⁷ <b>{title7[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID7})__</u>\n\n⁸ <b>{title8[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID8})__</u>\n\n⁹ <b>{title9[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID9})__</u>\n\n¹⁰ <b>{title10[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID10})__</u>",    
             reply_markup=InlineKeyboardMarkup(buttons),
             disable_web_page_preview=True
         )  
@@ -753,7 +753,7 @@ async def popat(_,CallbackQuery):
     if i == 2:
         buttons = search_markup(ID1, ID2, ID3, ID4, ID5, duration1, duration2, duration3, duration4, duration5, user_id, query)
         await CallbackQuery.edit_message_text(
-            f"**✨ Vui lòng chọn bài hát bạn muốn chơi**¹ <b>{title1[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID1})__</u>\n\n² <b>{title2[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID2})__</u>\n\n³ <b>{title3[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID3})__</u>\n\n⁴ <b>{title4[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID4})__</u>\n\n⁵ <b>{title5[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID5})__</u>",    
+            f"**✨ Please select the song you want to play**¹ <b>{title1[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID1})__</u>\n\n² <b>{title2[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID2})__</u>\n\n³ <b>{title3[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID3})__</u>\n\n⁴ <b>{title4[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID4})__</u>\n\n⁵ <b>{title5[:27]}</b>\n  ┗ 💡 <u>__[More Information](https://t.me/{BOT_USERNAME}?start=info_{ID5})__</u>",    
             reply_markup=InlineKeyboardMarkup(buttons),
             disable_web_page_preview=True 
         )  
@@ -769,7 +769,7 @@ async def play_playlist_cmd(_, message):
     buttons = playlist_markup(user_name, user_id)
     await message.reply_photo(
     photo=thumb, 
-    caption=("**__Tính năng danh sách phát của âm nhạc __ **\n\nChọn danh sách phát bạn muốn phát!."),    
+    caption=("**__Music's Playlist Feature__**\n\nSelect the Playlist you want to play!."),    
     reply_markup=InlineKeyboardMarkup(buttons),
     )
     return
