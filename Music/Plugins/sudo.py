@@ -6,7 +6,7 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 
-@app.on_message(filters.command("addsudo") & filters.user(OWNER))
+@app.on_message(filters.command("12addsudo") & filters.user(OWNER))
 async def useradd(_, message: Message):
     if not message.reply_to_message:
         if len(message.command) != 2:
@@ -44,7 +44,7 @@ async def useradd(_, message: Message):
     return
 
 
-@app.on_message(filters.command("delsudo") & filters.user(OWNER))
+@app.on_message(filters.command("12delsudo") & filters.user(OWNER))
 async def userdel(_, message: Message):
     if not message.reply_to_message:
         if len(message.command) != 2:
@@ -77,7 +77,7 @@ async def userdel(_, message: Message):
     await message.reply_text(f"Something wrong happened.")
 
 
-@app.on_message(filters.command("sudolist"))
+@app.on_message(filters.command("12sudolist"))
 async def sudoers_list(_, message: Message):
     sudoers = await get_sudoers()
     text = "**Sudo User List**\n\n"
