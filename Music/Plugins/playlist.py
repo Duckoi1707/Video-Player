@@ -115,7 +115,7 @@ async def pause_cmd(_, message):
 
 @app.on_message(filters.command("delmyplaylist"))
 async def pause_cmd(_, message):
-    usage = ("Usage:\n\n/delmyplaylist [Numbers between 1-30] ( to delete a particular music in playlist )\n\nor\n\n /delmyplaylist all ( to delete whole playlist )")
+    usage = ("Usage:\n\n/delmyplaylist [Số giữa 1-30] ( tôi xóa một bản nhạc cụ thể trong danh sách phát )\n\nor\n\n /delmyplaylist all ( để xóa toàn bộ danh sách phát )")
     if len(message.command) < 2:
         return await message.reply_text(usage)
     name = message.text.split(None, 1)[1].strip()
@@ -149,8 +149,8 @@ async def pause_cmd(_, message):
 async def delgroupplaylist(_, message):
     a = await app.get_chat_member(message.chat.id , message.from_user.id)
     if not a.can_manage_voice_chats:
-        return await message.reply_text("I don't have the required permission to perform this action.\n**Permission:** __MANAGE VOICE CHATS__")
-    usage = ("Usage:\n\n/delgroupplaylist [Numbers between 1-30] ( to delete a particular music in playlist )\n\nor\n\n /delgroupplaylist all ( to delete whole playlist )")
+        return await message.reply_text("Tôi không có quyền cần thiết để thực hiện hành động này.\n**Permission:** __QUẢN LÝ TRÒ CHUYỆN GIỌNG NÓI__")
+    usage = ("Usage:\n\n/delgroupplaylist [Numbers between 1-30] ( để xóa một bản nhạc cụ thể trong danh sách phát )\n\nor\n\n /delgroupplaylist all ( để xóa toàn bộ danh sách phát )")
     if len(message.command) < 2:
         return await message.reply_text(usage)
     name = message.text.split(None, 1)[1].strip()
@@ -159,11 +159,11 @@ async def delgroupplaylist(_, message):
     if name not in options:
         return await message.reply_text(usage)
     if len(message.text) == 21:
-        return await message.reply_text(f"Confirmation!!\nYou sure you want to delete whole whole playlist?", reply_markup=confirm_group_keyboard)
+        return await message.reply_text(f"Xác nhận!!\nBạn chắc chắn muốn xóa toàn bộ danh sách phát?", reply_markup=confirm_group_keyboard)
     else:
          _playlist = await get_note_names(message.chat.id)
     if not _playlist:
-        await message.reply_text("Group has no Playlist on Music's Server")
+        await message.reply_text("Nhóm không có Danh sách phát trên Máy chủ của Nhạc")
     else:
         titlex = []
         j = 0
@@ -174,7 +174,7 @@ async def delgroupplaylist(_, message):
             if j == count:
                 deleted = await delete_playlist(message.chat.id, note)
                 if deleted:
-                    return await message.reply_text(f"**Deleted the {count} music in group's playlist**")
+                    return await message.reply_text(f"**đã xóa {count} nhạc trong danh sách của nhóm**")
                 else:
-                    return await message.reply_text(f"**No such saved music in Group playlist.**")                                
-        await message.reply_text("You have no such music in Group Playlist.")
+                    return await message.reply_text(f"**Không có bản nhạc đã lưu nào như vậy trong danh sách phát của Nhóm.**")                                
+        await message.reply_text("Bạn không có bản nhạc nào như vậy trong Danh sách phát nhóm.")
