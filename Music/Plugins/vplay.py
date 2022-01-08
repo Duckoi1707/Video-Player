@@ -121,7 +121,7 @@ sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
     if not a.can_invite_users:
         await message.reply_text(
             f"""
-💡💡Để sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
+💡 Để sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
 » ❌ Quản lý trò chuyện thoại
 ✨ Được cung cấp bởi: [{BOT_NAME}](t.me/{BOT_USERNAME})
 """,
