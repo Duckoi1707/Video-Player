@@ -88,7 +88,7 @@ async def member_permissions(chat_id: int, user_id: int):
     return perms
 from Music.MusicUtilities.helpers.administrator import adminsOnly
 
-@app.on_message(filters.command("cleandb"))
+@app.on_message(filters.command("xoabonho"))
 async def stop_cmd(_, message): 
     chat_id = message.chat.id
     try:
@@ -100,7 +100,7 @@ async def stop_cmd(_, message):
         await music.pytgcalls.leave_group_call(chat_id)
     except:
         pass   
-    await message.reply_text("Successfully Cleaned download files.")
+    await message.reply_text("Đã xóa thành công tệp tải xuống.")
     
 @app.on_message(filters.command(["pause", f"pause@{BOT_USERNAME}", "tamdung"]))
 async def pause_cmd(_, message): 
