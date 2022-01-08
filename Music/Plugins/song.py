@@ -23,7 +23,7 @@ def time_to_seconds(time):
 
 
 @Client.on_message(
-    command(["song", f"song@{BOT_USERNAME}", "vsong", f"vsong@{BOT_USERNAME}"])
+    command(["so32ng", f"son32g@{BOT_USERNAME}", "vso32ng", f"vs32ong@{BOT_USERNAME}"])
 )
 async def mpthree(_, message: Message):
     chat_id = message.chat.id
@@ -153,7 +153,7 @@ You are an Anonymous Admin! Revert to User Account From Admin Rights.
         return
 
 
-@Client.on_callback_query(filters.regex(pattern=r"beta"))
+@Client.on_callback_query(filters.regex(pattern=r"b32eta"))
 async def startyuplay(_, CallbackQuery):
     callback_data = CallbackQuery.data.strip()
     CallbackQuery.message.chat.id
