@@ -108,7 +108,7 @@ async def pause_cmd(_, message):
     thumb ="cache/photo_2021-11-20_01-01-55.jpg"
     await message.reply_photo(
     photo=thumb, 
-    caption=("**__Music's Playlist Feature__**\n\nSelect The Playlist, You want to check!"),    
+    caption=("**__Tính năng danh sách phát của âm nhạc__**\n\nChọn danh sách phát, Bạn muốn kiểm tra!"),    
     reply_markup=play_list_keyboard) 
     return 
 
@@ -124,7 +124,7 @@ async def pause_cmd(_, message):
     if name not in options:
         return await message.reply_text(usage)
     if len(message.text) == 18:
-        return await message.reply_text(f"Confirmation!!\nYou sure you want to delete your whole playlist?", reply_markup=confirm_keyboard)
+        return await message.reply_text(f"Xác nhận!!\nBạn chắc chắn muốn xóa toàn bộ danh sách phát của mình?", reply_markup=confirm_keyboard)
     else:
          _playlist = await get_note_names(message.from_user.id)
     if not _playlist:
@@ -139,10 +139,10 @@ async def pause_cmd(_, message):
             if j == count:
                 deleted = await delete_playlist(message.from_user.id, note)
                 if deleted:
-                    return await message.reply_text(f"**Deleted the {count} music in playlist**")
+                    return await message.reply_text(f"**đã xóa {count} nhạc trong danh sách phát**")
                 else:
-                    return await message.reply_text(f"**No such saved music in playlist.**")                                
-        await message.reply_text("You have no such music in Playlist.")                             
+                    return await message.reply_text(f"**Không có bản nhạc đã lưu nào như vậy trong danh sách phát.**")                                
+        await message.reply_text("Bạn không có bản nhạc nào như vậy trong Danh sách phát.")                             
 
         
 @app.on_message(filters.command("delgroupplaylist"))
