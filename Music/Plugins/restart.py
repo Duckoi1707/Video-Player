@@ -8,7 +8,7 @@ from Music.MusicUtilities.database.queue import get_active_chats, remove_active_
 from pyrogram import filters
 
 
-@app.on_message(filters.command("") & filters.user(SUDOERS))
+@app.on_message(filters.command("213123123123123213123123123df") & filters.user(SUDOERS))
 async def theme_func(_, message):
     A = "downloads"
     B = "raw_files"
