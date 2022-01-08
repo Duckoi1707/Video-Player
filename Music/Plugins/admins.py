@@ -102,10 +102,10 @@ async def stop_cmd(_, message):
         pass   
     await message.reply_text("Successfully Cleaned download files.")
     
-@app.on_message(filters.command(["pause", f"pause@{BOT_USERNAME}", "ps"]))
+@app.on_message(filters.command(["pause", f"pause@{BOT_USERNAME}", "tamdung"]))
 async def pause_cmd(_, message): 
     if message.sender_chat:
-        return await message.reply_text("You are Anonymous Admin Plz revert Your Account.") 
+        return await message.reply_text("Bạn là Quản trị viên Ẩn danh. Vui lòng hoàn nguyên Tài khoản của bạn.") 
     permission = "can_manage_voice_chats"
     m = await adminsOnly(permission, message)
     if m == 1:
@@ -113,17 +113,17 @@ async def pause_cmd(_, message):
     checking = message.from_user.mention
     chat_id = message.chat.id
     if not await is_active_chat(chat_id):
-        return await message.reply_text("I don't think if something is playing in the voice chat")
+        return await message.reply_text("Tôi không nghĩ nếu có thứ gì đó đang phát trong cuộc trò chuyện thoại")
     elif not await is_music_playing(message.chat.id):
-        return await message.reply_text("I don't think if something is playing in the voice chat")   
+        return await message.reply_text("Tôi không nghĩ nếu có thứ gì đó đang phát trong cuộc trò chuyện thoại")   
     await music_off(chat_id)
     await music.pytgcalls.pause_stream(chat_id)
     await message.reply_text(f"🎧 Song Paused By {checking}!")
     
-@app.on_message(filters.command(["resume", f"resume@{BOT_USERNAME}", "rs"]))
+@app.on_message(filters.command(["resume", f"resume@{BOT_USERNAME}", "tieptuc"]))
 async def stop_cmd(_, message): 
     if message.sender_chat:
-        return await message.reply_text("You are Anonymous Admin Plz revert Your Account.") 
+        return await message.reply_text("Bạn là Quản trị viên Ẩn danh. Vui lòng hoàn nguyên Tài khoản của Bạn.") 
     permission = "can_manage_voice_chats"
     m = await adminsOnly(permission, message)
     if m == 1:
@@ -131,18 +131,18 @@ async def stop_cmd(_, message):
     checking = message.from_user.mention
     chat_id = message.chat.id
     if not await is_active_chat(chat_id):
-        return await message.reply_text("I don't think if something is playing in the voice chat")
+        return await message.reply_text("Tôi không nghĩ nếu có thứ gì đó đang phát trong cuộc trò chuyện thoại")
     elif await is_music_playing(chat_id):
-        return await message.reply_text("I don't think if something is playing in the voice chat") 
+        return await message.reply_text("Tôi không nghĩ nếu có thứ gì đó đang phát trong cuộc trò chuyện thoại") 
     else:
         await music_on(chat_id)
         await music.pytgcalls.resume_stream(chat_id)
-        await message.reply_text(f"**🎧 Resumed By {checking}!**")
+        await message.reply_text(f"**🎧 Tiếp tục bởi {checking}!**")
 
-@app.on_message(filters.command(["end", f"end@{BOT_USERNAME}", "e"]))
+@app.on_message(filters.command(["end", f"end@{BOT_USERNAME}", "tat"]))
 async def stop_cmd(_, message): 
     if message.sender_chat:
-        return await message.reply_text("You are Anonymous Admin Plz revert Your Account.") 
+        return await message.reply_text("Bạn là Quản trị viên Ẩn danh. Vui lòng hoàn nguyên Tài khoản của bạn.") 
     permission = "can_manage_voice_chats"
     m = await adminsOnly(permission, message)
     if m == 1:
@@ -157,14 +157,14 @@ async def stop_cmd(_, message):
         await remove_active_chat(chat_id)
         await music.pytgcalls.leave_group_call(chat_id)
         await call_py.leave_group_call(chat_id)
-        await message.reply_text(f"**🎧 Queue Cleared \n Leaving Vc chat {checking}!**") 
+        await message.reply_text(f"**🎧 Đã xóa hàng đợi \n Đang rời khỏi trò chuyện Vc {checking}!**") 
     else:
-        return await message.reply_text("I don't think if something is playing in the voice chat")
+        return await message.reply_text("Tôi không nghĩ nếu có thứ gì đó đang phát trong cuộc trò chuyện thoại")
     
-@app.on_message(filters.command(["skip", f"skip@{BOT_USERNAME}", "sk"]))
+@app.on_message(filters.command(["skip", f"skip@{BOT_USERNAME}", "boqua"]))
 async def stop_cmd(_, message): 
     if message.sender_chat:
-        return await message.reply_text("You are Anonymous Admin Plz revert Your Account.") 
+        return await message.reply_text("Bạn là Quản trị viên Ẩn danh. Vui lòng hoàn nguyên Tài khoản của bạn.") 
     permission = "can_manage_voice_chats"
     m = await adminsOnly(permission, message)
     if m == 1:
@@ -173,7 +173,7 @@ async def stop_cmd(_, message):
     chat_id = message.chat.id
     chat_title = message.chat.title
     if not await is_active_chat(chat_id):
-        await message.reply_text("No music playing")
+        await message.reply_text("Không phát nhạc")
     else:
         task_done(chat_id)
         if is_empty(chat_id):
@@ -188,13 +188,13 @@ async def stop_cmd(_, message):
             f3 = (afk[2])
             finxx = (f"{f1}{f2}{f3}")
             if str(finxx) != "raw":   
-                mystic = await message.reply_text("Music is playing Playlist...\n\nDownloading Next Music From Playlist....")
+                mystic = await message.reply_text("Nhạc đang phát Danh sách phát ... \n\nTải xuống Nhạc tiếp theo từ Danh sách phát....")
                 url = (f"https://www.youtube.com/watch?v={afk}")
                 try:
                     with yt_dlp.YoutubeDL(ytdl_opts) as ytdl:
                         x = ytdl.extract_info(url, download=False)
                 except Exception as e:
-                    return await mystic.edit(f"Failed to download this video.\n\n**Reason**:{e}") 
+                    return await mystic.edit(f"Không tải xuống được video này.\n\n**Lý do**:{e}") 
                 title = (x["title"])
                 videoid = afk
                 def my_hook(d):
@@ -261,11 +261,11 @@ async def stop_cmd(_, message):
                     reply_markup=InlineKeyboardMarkup(buttons),
                     caption=(
                         f"""
-<b>⏭️ Skipped To Next Song</b>
+<b>⏭️ Đã bỏ qua bài hát tiếp theo </b>
 
-<b>🏷 Name:</b>[{title[:25]}]({url})
-<b>⏱️ Duration:</b> {duration}
-<b>🎧 Requested By:</b> {semx.mention}
+<b>🏷 Tên Bài Hát:</b>[{title[:25]}]({url})
+<b>⏱️ Thời Lượng:</b> {duration}
+<b>🎧 Yêu Cầu Bởi:</b> {semx.mention}
 """
                     ),
                 )
@@ -298,11 +298,11 @@ async def stop_cmd(_, message):
                 photo=f"downloads/{_chat_}final.png",
                     reply_markup=InlineKeyboardMarkup(buttons),
                     caption=f"""
-<b>⏭️ Skipped To next Song </b>
+<b>⏭️ Bỏ Qua Bài Hát </b>
 
-<b>🏷️ Name:</b> {title}
-<b>⏱️ Duration:</b> {duration}
-<b>🎧 Requested by </b> {username}
+<b>🏷️ Tên Bài Hát:</b> {title}
+<b>⏱️ Thời Lượng:</b> {duration}
+<b>🎧 Yêu Cầu Bởi </b> {username}
 """,
                 )
                 return
