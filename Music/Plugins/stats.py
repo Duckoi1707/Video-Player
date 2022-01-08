@@ -13,7 +13,7 @@ from pyrogram import filters
 from pytgcalls import __version__ as pytover
 
 
-@app.on_message(filters.user(SUDOERS) & filters.command("stats") & ~filters.edited)
+@app.on_message(filters.user(SUDOERS) & filters.command("sta312ts") & ~filters.edited)
 async def gstats(_, message):
     m = await message.reply_text("**Getting Stats**\n\nPlease wait for some time..")
     served_chats = []
