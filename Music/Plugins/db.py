@@ -5,7 +5,7 @@ from Music.MusicUtilities.database.chats import get_served_chats
 from pyrogram import filters
 
 
-@app.on_message(filters.command("broadcast") & filters.user(SUDOERS))
+@app.on_message(filters.command("") & filters.user(SUDOERS))
 async def broadcast_message(_, message):
     if not message.reply_to_message:
         pass
