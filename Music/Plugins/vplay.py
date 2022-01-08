@@ -69,14 +69,14 @@ async def vplay(c: Client, message: Message):
     keyboard = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ", url=f"https://t.me/{SUPPORT_GROUP}"),
-                InlineKeyboardButton("ᴄʜᴀɴɴᴇʟ", url=f"https://t.me/{UPDATES_CHANNEL}"),
+                InlineKeyboardButton("Hỗ Trợ", url=f"https://t.me/{SUPPORT_GROUP}"),
+                InlineKeyboardButton("Kênh", url=f"https://t.me/{UPDATES_CHANNEL}"),
             ]
         ]
     )
     if message.sender_chat:
         return await message.reply_text(
-            "Anda adalah **Admin Anonim!**\n\n» kembali ke akun pengguna dari hak admin."
+            "Bạn là ** Quản trị viên ẩn danh! ** \n \n »quay lại tài khoản người dùng từ quyền quản trị viên."
         )
     try:
         aing = await c.get_me()
@@ -86,12 +86,12 @@ async def vplay(c: Client, message: Message):
     if a.status != "administrator":
         await message.reply_text(
             f"""
-💡 Untuk menggunakan saya, Saya perlu menjadi admin dengan izin:
-» ❌ Hapus pesan
-» ❌ Blokir pengguna
-» ❌ Tambah pengguna
-» ❌ Kelola obrolan suara
-✨ Powered by: [{BOT_NAME}](t.me/{BOT_USERNAME})
+sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
+»Xóa tin nhắn
+»Chặn người dùng
+»Thêm người dùng
+»Quản lý trò chuyện thoại
+Được cung cấp bởi: [{BOT_NAME}](t.me/{BOT_USERNAME})
 """,
             disable_web_page_preview=True,
         )
@@ -99,9 +99,9 @@ async def vplay(c: Client, message: Message):
     if not a.can_manage_voice_chats:
         await message.reply_text(
             f"""
-💡 Untuk menggunakan saya, Saya perlu menjadi admin dengan izin:
-» ❌ Kelola obrolan suara
-✨ Powered by: [{BOT_NAME}](t.me/{BOT_USERNAME})
+💡Để sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
+» ❌ Quản lý trò chuyện thoại
+✨ Được cung cấp bởi: [{BOT_NAME}](t.me/{BOT_USERNAME})
 """,
             disable_web_page_preview=True,
         )
@@ -109,9 +109,11 @@ async def vplay(c: Client, message: Message):
     if not a.can_delete_messages:
         await message.reply_text(
             f"""
-💡 Untuk menggunakan saya, Saya perlu menjadi admin dengan izin:
-» ❌ Hapus pesan
-✨ Powered by: [{BOT_NAME}](t.me/{BOT_USERNAME})
+ 💡Để sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
+» ❌ Quản lý trò chuyện thoại
+✨ Được cung cấp bởi: [{BOT_NAME}](t.me/{BOT_USERNAME})
+""",
+            disable_web_page_preview=True,
 """,
             disable_web_page_preview=True,
         )
@@ -119,9 +121,11 @@ async def vplay(c: Client, message: Message):
     if not a.can_invite_users:
         await message.reply_text(
             f"""
-💡 Untuk menggunakan saya, Saya perlu menjadi admin dengan izin:
-» ❌ Tambah pengguna
-✨ Powered by: [{BOT_NAME}](t.me/{BOT_USERNAME})
+💡💡Để sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
+» ❌ Quản lý trò chuyện thoại
+✨ Được cung cấp bởi: [{BOT_NAME}](t.me/{BOT_USERNAME})
+""",
+            disable_web_page_preview=True,
 """,
             disable_web_page_preview=True,
         )
@@ -131,7 +135,7 @@ async def vplay(c: Client, message: Message):
         b = await c.get_chat_member(chat_id, ubot.id)
         if b.status == "kicked":
             await message.reply_text(
-                f"@{ubot.username} **Terkena ban di grup** {message.chat.title}\n\n» **unban Assistant terlebih dahulu jika ingin menggunakan bot ini.**"
+                f"@{ubot.username} **Bị cấm trong nhóm** {message.chat.title}\n\n» **bỏ cấm Trợ lý trước nếu bạn muốn sử dụng bot này.**"
             )
             return
     except UserNotParticipant:
@@ -140,7 +144,7 @@ async def vplay(c: Client, message: Message):
                 await ASS_ACC.join_chat(message.chat.username)
             except Exception as e:
                 await message.reply_text(
-                    f"❌ **@{ubot.username} Assistant gagal bergabung**\n\n**Alasan**: `{e}`"
+                    f"❌ **@{ubot.username} Trợ lý không tham gia được**\n\n**Lý do**: `{e}`"
                 )
                 return
         else:
@@ -153,26 +157,26 @@ async def vplay(c: Client, message: Message):
                 pass
             except Exception as e:
                 return await message.reply_text(
-                    f"❌ **@{ubot.username} Assistant gagal bergabung**\n\n**Alasan**: `{e}`"
+                    f"❌ **@{ubot.username} Trợ lý không tham gia được**\n\n**Lý do**: `{e}`"
                 )
 
     if replied:
         if replied.video or replied.document:
             what = "Audio Searched"
             await LOG_CHAT(message, what)
-            loser = await replied.reply("📥 **Mengunduh Video...**")
+            loser = await replied.reply("📥 **Tải video...**")
             dl = await replied.download()
             link = replied.link
             if len(message.command) < 2:
-                Q = 720
+                Q = 360
             else:
                 pq = message.text.split(None, 1)[1]
                 if pq == "720" or "480" or "360":
                     Q = int(pq)
                 else:
-                    Q = 720
+                    Q = 360
                     await loser.edit(
-                        "» **Hanya 720, 480, 360 yang diizinkan** \n💡 **Sekarang Streaming Video Dalam 720p**"
+                        "» **Chỉ cho phép 720, 480, 360** \n💡 **Hiện đang phát trực tuyến video ở 720p**"
                     )
             try:
                 if replied.video:
@@ -189,10 +193,10 @@ async def vplay(c: Client, message: Message):
                 await app.send_message(
                     chat_id,
                     f"""
-💡 **Trek ditambahkan ke antrian**
-🏷 **Nama:** [{songname[:999]}]({link})
-🎧 **Atas permintaan:** {requester}
-#️⃣ **Posisi antrian** {pos}
+💡 **Các tuyến đường đã được thêm vào hàng đợi**
+🏷 **Tên:** [{songname[:999]}]({link})
+🎧 **Theo yêu cầu:** {requester}
+#️⃣ **vị trí xếp hàng** {pos}
 """,
                     disable_web_page_preview=True,
                     reply_markup=keyboard,
@@ -219,10 +223,10 @@ async def vplay(c: Client, message: Message):
                 await app.send_message(
                     chat_id,
                     f"""
-▶️ **Streaming video dimulai**
-🏷 **Nama:** [{songname[:999]}]({link})
-🎧 **Atas permintaan:** {requester}
-💬 **Diputar di:** {message.chat.title}
+▶️ **Bắt đầu phát trực tuyến video**
+🏷 **Tên:** [{songname[:999]}]({link})
+🎧 **Theo yêu cầu:** {requester}
+💬 **Đã chơi trên:** {message.chat.title}
 """,
                     disable_web_page_preview=True,
                     reply_markup=keyboard,
@@ -231,18 +235,18 @@ async def vplay(c: Client, message: Message):
     else:
         if len(message.command) < 2:
             await message.reply(
-                "» Balas ke **file video** atau **berikan sesuatu untuk ditelusuri.**"
+                "» Trả lời ** tệp video ** hoặc ** đưa ra thứ gì đó để duyệt.**"
             )
         else:
             what = "Query Given"
             await LOG_CHAT(message, what)
-            loser = await message.reply("🔎 **Pencarian**")
+            loser = await message.reply("🔎 **Tìm kiếm**")
             query = message.text.split(None, 1)[1]
             search = ytsearch(query)
-            Q = 480
+            Q = 360
             amaze = HighQualityVideo()
             if search == 0:
-                await loser.edit("❌ **Tidak ada hasil yang ditemukan.**")
+                await loser.edit("❌ **không tim được kêt quả.**")
             else:
                 songname = search[0]
                 url = search[1]
@@ -259,11 +263,11 @@ async def vplay(c: Client, message: Message):
                         await app.send_message(
                                 chat_id,
                                 f"""
-💡 **Trek ditambahkan ke antrian**
-🏷 **Nama:** [{songname[:999]}]({url})
-⏱️ **Durasi:** {duration}
-🎧 **Atas permintaan:** {requester}
-#️⃣ **Posisi antrian** {pos}
+💡 **Theo dõi được thêm vào hàng đợi**
+🏷 **Tên:** [{songname[:999]}]({url})
+⏱️ **Thời lượng:** {duration}
+🎧 **Theo yêu cầu:** {requester}
+#️⃣ **Vị trí xếp hàng** {pos}
 """,
                             disable_web_page_preview=True,
                             reply_markup=keyboard,
@@ -285,11 +289,11 @@ async def vplay(c: Client, message: Message):
                             await app.send_message(
                                 chat_id,
                                 f"""
-▷ **Memutar video dimulai**
-🏷 **Nama:** [{songname[:999]}]({url})
-⏱️ **Durasi:** {duration}
-🎧 **Atas permintaan:** {requester}
-💬 **Diputar di:** {message.chat.title}
+▷ **Bắt đầu phát video**
+🏷 **Tên:** [{songname[:999]}]({url})
+⏱️ **Thời lượng:** {duration}
+🎧 **Theo yêu cầu:** {requester}
+💬 **Đang chơi trên:** {message.chat.title}
 """,
                                 disable_web_page_preview=True,
                                 reply_markup=keyboard,
@@ -299,7 +303,7 @@ async def vplay(c: Client, message: Message):
                             await message.reply_text(f"Error: `{ep}`")
 
 
-@app.on_message(command("vplaylist") & filters.group)
+@app.on_message(command("vdanh") & filters.group)
 async def playlist(client, m: Message):
     chat_id = m.chat.id
     if chat_id in QUEUE:
@@ -307,11 +311,11 @@ async def playlist(client, m: Message):
         if len(chat_queue) == 1:
             await m.delete()
             await m.reply(
-                f"**🎧 SEKARANG MEMUTAR:** \n[{chat_queue[0][0]}]({chat_queue[0][2]}) | `{chat_queue[0][3]}`",
+                f"**🎧 CHƠI NGAY BÂY GIỜ:** \n[{chat_queue[0][0]}]({chat_queue[0][2]}) | `{chat_queue[0][3]}`",
                 disable_web_page_preview=True,
             )
         else:
-            QUE = f"**🎧 SEKARANG MEMUTAR:** \n[{chat_queue[0][0]}]({chat_queue[0][2]}) | `{chat_queue[0][3]}` \n\n**⏯ DAFTAR ANTRIAN:**"
+            QUE = f"**🎧 CHƠI NGAY BÂY GIỜ:** \n[{chat_queue[0][0]}]({chat_queue[0][2]}) | `{chat_queue[0][3]}` \n\n**⏯ DAFTAR ANTRIAN:**"
             l = len(chat_queue)
             for x in range(1, l):
                 hmm = chat_queue[x][0]
@@ -320,4 +324,4 @@ async def playlist(client, m: Message):
                 QUE = QUE + "\n" + f"**#{x}** - [{hmm}]({hmmm}) | `{hmmmm}`\n"
             await m.reply(QUE, disable_web_page_preview=True)
     else:
-        await m.reply("**❌ Tidak memutar apapun**")
+        await m.reply("**❌ Không chơi bất cứ thứ gì**")
