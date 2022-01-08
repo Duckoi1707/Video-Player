@@ -1,8 +1,9 @@
 import asyncio
 import os
-from Music.MusicUtilities.tgcallsrun import ASS_ACC
 
-from pyrogram import Client, filters
+from pyrogram import filters
+from pyrogram import Client
+from pyrogram import Client as app
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from pytgcalls import StreamType
@@ -14,17 +15,15 @@ from pytgcalls.types.input_stream.quality import (
     MediumQualityVideo,
 )
 from youtubesearchpython import VideosSearch
-from Music.config import SUPPORT_GROUP, UPDATES_CHANNEL
+
 from Music import BOT_NAME, BOT_USERNAME, app
-from Music.MusicUtilities.tgcallsrun.music import pytgcalls as call_py
+from Music.config import SUPPORT_GROUP, UPDATES_CHANNEL, GROUP, CHANNEL
 from Music.MusicUtilities.helpers.filters import command
 from Music.MusicUtilities.helpers.logger import LOG_CHAT
-from Music.MusicUtilities.tgcallsrun.queues import (
-    QUEUE,
-    add_to_queue,
-    clear_queue,
-    get_queue,
-)
+from Music.MusicUtilities.tgcallsrun import ASS_ACC
+from Music import app
+from Music.MusicUtilities.tgcallsrun.queues import QUEUE, add_to_queue, get_queue
+from Music.MusicUtilities.tgcallsrun.music import pytgcalls as call_py
 
 
 def ytsearch(query):
@@ -59,7 +58,7 @@ async def ytdl(link):
 
 
 
-@app.on_message(command("vplay") & filters.group)
+@Client.on_message(command("vplay") & filters.group)
 async def vplay(c: Client, message: Message):
     replied = message.reply_to_message
     chat_id = message.chat.id
@@ -69,14 +68,14 @@ async def vplay(c: Client, message: Message):
     keyboard = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton("Hỗ Trợ", url=f"https://t.me/{SUPPORT_GROUP}"),
-                InlineKeyboardButton("Kênh", url=f"https://t.me/{UPDATES_CHANNEL}"),
+                InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ", url=f"https://t.me/{GROUP}"),
+                InlineKeyboardButton("ᴄʜᴀɴɴᴇʟ", url=f"https://t.me/{CHANNEL}"),
             ]
         ]
     )
     if message.sender_chat:
         return await message.reply_text(
-            "Bạn là ** Quản trị viên ẩn danh! ** \n \n »quay lại tài khoản người dùng từ quyền quản trị viên."
+            "You are **Anonymous Admin!**\n\n» back to user account from admin rights."
         )
     try:
         aing = await c.get_me()
@@ -86,12 +85,12 @@ async def vplay(c: Client, message: Message):
     if a.status != "administrator":
         await message.reply_text(
             f"""
-sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
-»Xóa tin nhắn
-»Chặn người dùng
-»Thêm người dùng
-»Quản lý trò chuyện thoại
-Được cung cấp bởi: [{BOT_NAME}](t.me/{BOT_USERNAME})
+To use me I need to be admin with permissions: 
+» Delete message 
+» Block user 
+» Add user 
+» Manage voice chat 
+Powered by : [Premium Music](t.me/{BOT_USERNAME})
 """,
             disable_web_page_preview=True,
         )
@@ -99,9 +98,9 @@ sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
     if not a.can_manage_voice_chats:
         await message.reply_text(
             f"""
-💡Để sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
-» ❌ Quản lý trò chuyện thoại
-✨ Được cung cấp bởi: [{BOT_NAME}](t.me/{BOT_USERNAME})
+To use me I need to be admin with permissions: 
+» Manage voice chat 
+Powered by: [{BOT_NAME}](t.me/{BOT_USERNAME})
 """,
             disable_web_page_preview=True,
         )
@@ -109,11 +108,10 @@ sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
     if not a.can_delete_messages:
         await message.reply_text(
             f"""
- 💡Để sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
-» ❌ Quản lý trò chuyện thoại
-✨ Được cung cấp bởi: [{BOT_NAME}](t.me/{BOT_USERNAME})
-""",
-            disable_web_page_preview=True,
+To use me I need to be admin with permissions: 
+
+» Delete message 
+Powered by: [Premium Music](t.me/{BOT_USERNAME})
 """,
             disable_web_page_preview=True,
         )
@@ -121,11 +119,10 @@ sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
     if not a.can_invite_users:
         await message.reply_text(
             f"""
- 💡Để sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
-» ❌ Quản lý trò chuyện thoại
-✨ Được cung cấp bởi: [{BOT_NAME}](t.me/{BOT_USERNAME})
-""",
-            disable_web_page_preview=True,
+💡 To use me, I need to be an admin with permission: 
+
+»❌ Add users 
+Powered by: [Premium Music](t.me/{BOT_USERNAME})
 """,
             disable_web_page_preview=True,
         )
@@ -135,7 +132,7 @@ sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
         b = await c.get_chat_member(chat_id, ubot.id)
         if b.status == "kicked":
             await message.reply_text(
-                f"@{ubot.username} **Bị cấm trong nhóm** {message.chat.title}\n\n» **bỏ cấm Trợ lý trước nếu bạn muốn sử dụng bot này.**"
+                f"@{ubot.username} **Banned in the group** {message.chat.title}\n\n» **unban Assistant first if you want to use this bot.**"
             )
             return
     except UserNotParticipant:
@@ -144,7 +141,7 @@ sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
                 await ASS_ACC.join_chat(message.chat.username)
             except Exception as e:
                 await message.reply_text(
-                    f"❌ **@{ubot.username} Trợ lý không tham gia được**\n\n**Lý do**: `{e}`"
+                    f"❌ **@{ubot.username} Assistant failed to join**\n\n**Reason**: `{e}`"
                 )
                 return
         else:
@@ -157,32 +154,34 @@ sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
                 pass
             except Exception as e:
                 return await message.reply_text(
-                    f"❌ **@{ubot.username} Trợ lý không tham gia được**\n\n**Lý do**: `{e}`"
+                    f"❌ **@{ubot.username} Assistant failed to join**\n\n**Reason**: `{e}`"
                 )
 
     if replied:
         if replied.video or replied.document:
             what = "Audio Searched"
             await LOG_CHAT(message, what)
-            loser = await replied.reply("📥 **Tải video...**")
+            loser = await replied.reply("📥 **Downloading Video...**")
             dl = await replied.download()
             link = replied.link
             if len(message.command) < 2:
-                Q = 360
+                Q = 720
             else:
                 pq = message.text.split(None, 1)[1]
                 if pq == "720" or "480" or "360":
                     Q = int(pq)
                 else:
-                    Q = 360
+                    Q = 720
                     await loser.edit(
-                        "» **Chỉ cho phép 720, 480, 360** \n💡 **Hiện đang phát trực tuyến video ở 720p**"
+                        "» **Only 720, 480, 360 allowed** \n💡 **Now Streaming Video In 720p**"
                     )
             try:
                 if replied.video:
                     songname = replied.video.file_name[:70]
+                    duration = replied.video.duration
                 elif replied.document:
                     songname = replied.document.file_name[:70]
+                    duration = replied.document.duration
             except BaseException:
                 songname = "Video"
 
@@ -193,10 +192,11 @@ sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
                 await app.send_message(
                     chat_id,
                     f"""
-💡 **Các tuyến đường đã được thêm vào hàng đợi**
-🏷 **Tên:** [{songname[:999]}]({link})
-🎧 **Theo yêu cầu:** {requester}
-#️⃣ **vị trí xếp hàng** {pos}
+**Track added to queue** 
+
+**Name:** [{songname[:999]}]({link}) 
+🎧 **On request:** {requester} 
+#️⃣ **Queue position** {pos}
 """,
                     disable_web_page_preview=True,
                     reply_markup=keyboard,
@@ -223,10 +223,12 @@ sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
                 await app.send_message(
                     chat_id,
                     f"""
-▶️ **Bắt đầu phát trực tuyến video**
-🏷 **Tên:** [{songname[:999]}]({link})
-🎧 **Theo yêu cầu:** {requester}
-💬 **Đã chơi trên:** {message.chat.title}
+▶️ __Playing Video__
+
+🏷 **Name:** [{songname[:999]}]({link})
+🎧 **Requested By:** {requester}
+
+💬 **Played on:** {message.chat.title}
 """,
                     disable_web_page_preview=True,
                     reply_markup=keyboard,
@@ -235,18 +237,18 @@ sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
     else:
         if len(message.command) < 2:
             await message.reply(
-                "» Trả lời ** tệp video ** hoặc ** đưa ra thứ gì đó để duyệt.**"
+                "**Usage:.** /vplay [title Or Reply to a audio file] "
             )
         else:
             what = "Query Given"
             await LOG_CHAT(message, what)
-            loser = await message.reply("🔎 **Tìm kiếm**")
+            loser = await message.reply("🔎 **Searching**")
             query = message.text.split(None, 1)[1]
             search = ytsearch(query)
-            Q = 360
+            Q = 480
             amaze = HighQualityVideo()
             if search == 0:
-                await loser.edit("❌ **không tim được kêt quả.**")
+                await loser.edit("**No results found.**")
             else:
                 songname = search[0]
                 url = search[1]
@@ -254,7 +256,7 @@ sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
                 thumbnail = search[3]
                 veez, ytlink = await ytdl(url)
                 if veez == 0:
-                    await loser.edit(f"❌ yt-dl masalah terdeteksi\n\n» `{ytlink}`")
+                    await loser.edit(f"❌ yt-dl problem detected\n\n» `{ytlink}`")
                 else:
                     if chat_id in QUEUE:
                         pos = add_to_queue(chat_id, songname, ytlink, url, "Video", Q)
@@ -263,11 +265,13 @@ sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
                         await app.send_message(
                                 chat_id,
                                 f"""
-💡 **Theo dõi được thêm vào hàng đợi**
-🏷 **Tên:** [{songname[:999]}]({url})
-⏱️ **Thời lượng:** {duration}
-🎧 **Theo yêu cầu:** {requester}
-#️⃣ **Vị trí xếp hàng** {pos}
+💡 **Tracks added to Queue**
+
+🏷 **Name:** [{songname[:999]}]({url})
+⏱️ **Duration:** {duration}
+🎧 **Requested by:** {requester}
+
+#️⃣ **At position** {pos}
 """,
                             disable_web_page_preview=True,
                             reply_markup=keyboard,
@@ -289,11 +293,13 @@ sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
                             await app.send_message(
                                 chat_id,
                                 f"""
-▷ **Bắt đầu phát video**
-🏷 **Tên:** [{songname[:999]}]({url})
-⏱️ **Thời lượng:** {duration}
-🎧 **Theo yêu cầu:** {requester}
-💬 **Đang chơi trên:** {message.chat.title}
+▷ __Playing Video__
+
+🏷 **Name:** [{songname[:999]}]({url})
+⏱️ **Duration:** {duration}
+🎧 **Requested By:** {requester}
+
+💬 **Playing On:** {message.chat.title}
 """,
                                 disable_web_page_preview=True,
                                 reply_markup=keyboard,
@@ -303,7 +309,7 @@ sử dụng tôi, tôi cần phải là quản trị viên với sự cho phép:
                             await message.reply_text(f"Error: `{ep}`")
 
 
-@app.on_message(command("vdanh") & filters.group)
+@Client.on_message(command("vplaylist") & filters.group)
 async def playlist(client, m: Message):
     chat_id = m.chat.id
     if chat_id in QUEUE:
@@ -311,11 +317,11 @@ async def playlist(client, m: Message):
         if len(chat_queue) == 1:
             await m.delete()
             await m.reply(
-                f"**🎧 CHƠI NGAY BÂY GIỜ:** \n[{chat_queue[0][0]}]({chat_queue[0][2]}) | `{chat_queue[0][3]}`",
+                f"**🎧 NOW PLAYING:** \n[{chat_queue[0][0]}]({chat_queue[0][2]}) | `{chat_queue[0][3]}`",
                 disable_web_page_preview=True,
             )
         else:
-            QUE = f"**🎧 CHƠI NGAY BÂY GIỜ:** \n[{chat_queue[0][0]}]({chat_queue[0][2]}) | `{chat_queue[0][3]}` \n\n**⏯ DANH SÁCH QUEUE:**"
+            QUE = f"**🎧 NOW PLAYING:** \n[{chat_queue[0][0]}]({chat_queue[0][2]}) | `{chat_queue[0][3]}` \n\n**⏯ QUEUE LIST:**"
             l = len(chat_queue)
             for x in range(1, l):
                 hmm = chat_queue[x][0]
@@ -324,4 +330,4 @@ async def playlist(client, m: Message):
                 QUE = QUE + "\n" + f"**#{x}** - [{hmm}]({hmmm}) | `{hmmmm}`\n"
             await m.reply(QUE, disable_web_page_preview=True)
     else:
-        await m.reply("**❌ Không chơi bất cứ thứ gì**")
+        await m.reply("**❌ Doesn't play anything**")
