@@ -63,7 +63,7 @@ async def close(_, query: CallbackQuery):
     await query.message.delete()
 
 
-@app.on_message(command(["boqua"]) & filters.group)
+@app.on_message(command(["vboqua"]) & filters.group)
 @authorized_users_only
 async def skip(client, m: Message):
 
@@ -117,7 +117,7 @@ async def skip(client, m: Message):
             await m.reply(OP)
 
 
-@app.on_message(command(["tat"]) & filters.group)
+@app.on_message(command(["vtat"]) & filters.group)
 @authorized_users_only
 async def stop(client, m: Message):
     chat_id = m.chat.id
@@ -132,7 +132,7 @@ async def stop(client, m: Message):
         await m.reply("❌ **Không có trong luồng**")
 
 
-@app.on_message(command(["tamdung"]) & filters.group)
+@app.on_message(command(["vtamdung"]) & filters.group)
 @authorized_users_only
 async def pause(client, m: Message):
     chat_id = m.chat.id
@@ -148,7 +148,7 @@ async def pause(client, m: Message):
         await m.reply("❌ **Không có trong luồng**")
 
 
-@app.on_message(command(["tieptuc"]) & filters.group)
+@app.on_message(command(["vtieptuc"]) & filters.group)
 @authorized_users_only
 async def resume(client, m: Message):
     chat_id = m.chat.id
